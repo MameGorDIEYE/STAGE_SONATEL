@@ -37,7 +37,6 @@ Achat pass OM
     Input Text Into Current Element    ${NUMERO_DE_TELEPHONE}
     sleep    2
     Click Element    ${ACHETER}
-    #Wait Until Page Contains Element    ${CHAMP_DE_SAISIE_BUT}    timeout=10
     sleep    2s
     Click Element  ${CHAMP_DE_SAISIE_BUT}
     sleep    2s
@@ -322,6 +321,7 @@ DEPOT DISTRI
     #Click Element   ${CONFIRMER_RECHARGE_RAPIDO}
     #sleep     2
 
+# Vente de crédit avec distri
 DISTRI VENTE CREDIT
     Wait Until Page Contains Element    ${CREDIT}    timeout=10
     Click Element    ${CREDIT}
@@ -341,6 +341,7 @@ DISTRI VENTE CREDIT
     sleep     2
 
 
+#Paiement facture SEN EAU
 DISTRI PAIEMENT SEN EAU
     Wait Until Page Contains Element    ${FACTURES_BUTTON}    timeout=10
     Click Element    ${FACTURES_BUTTON}
