@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 6.1.1 (Python 3.12.3 on win32)" generated="20250128 12:13:31.207" rpa="false" schemaversion="4">
+<suite id="s1" name="Kabu Plus Distri Paiement Sen Eau" source="C:\Users\LENOVO\Desktop\Stage sonatel\Codes_supervision\Appium\maxit_lite\kabu_plus_distri_paiement_sen_eau.robot">
+<kw name="!SuiteSetup" library="keywords" type="SETUP">
+<arg>${ROBOT_TEL_MGD}</arg>
+<arg>${DEVICE_NAME_TEST}</arg>
+<kw name="Log" library="BuiltIn">
+<arg>Open Application ${REMOTE_URL_APPIUM} platformName=Android automationName=UiAutomator2 appPackage=${PACKAGE_NAME_KAABU_PLUS} appActivity=${ACTIVITY_NAME2} appium:udid=${DEVICE_NAME} noReset=${APP_RESET} fullReset=${APP_FULL_reset}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20250128 12:13:32.180" level="INFO">Open Application http://127.0.0.1:4723/wd/hub platformName=Android automationName=UiAutomator2 appPackage=sn.sonatel.mobile.kaabuplus appActivity=sn.sonatel.mobile.kaabuplus.MainActivity appium:udid=R58M92F00XP noReset=true fullReset=false</msg>
+<status status="PASS" starttime="20250128 12:13:32.180" endtime="20250128 12:13:32.180"/>
+</kw>
+<status status="PASS" starttime="20250128 12:13:32.179" endtime="20250128 12:13:32.181"/>
+</kw>
+<test id="s1-t1" name="01_kabu_plus_achat_rapido" line="11">
+<kw name="OPEN APP IN PHONE" library="keywords">
+<arg>${ROBOT_TEL_MGD}</arg>
+<arg>${DEVICE_NAME_TEST}</arg>
+<arg>${CODE}</arg>
+<kw name="Open Application" library="AppiumLibrary">
+<arg>${REMOTE_URL_APPIUM}</arg>
+<arg>platformName=Android</arg>
+<arg>automationName=UiAutomator2</arg>
+<arg>automationName=Appium</arg>
+<arg>appPackage=${PACKAGE_NAME_KAABU_PLUS}</arg>
+<arg>appActivity=${ACTIVITY_NAME2}</arg>
+<arg>appium:udid=${DEVICE_NAME}</arg>
+<arg>noReset=${APP_RESET}</arg>
+<arg>fullReset=${APP_FULL_reset}</arg>
+<doc>Opens a new application to given Appium server.
+Capabilities of appium server, Android and iOS,
+Please check https://appium.io/docs/en/2.1/cli/args/
+| *Option*            | *Man.* | *Description*     |
+| remote_url          | Yes    | Appium server url |
+| alias               | no     | alias             |
+| strict_ssl          | No     | allows you to send commands to an invalid certificate host like a self-signed one. |</doc>
+<status status="PASS" starttime="20250128 12:13:32.186" endtime="20250128 12:13:46.719"/>
+</kw>
+<status status="PASS" starttime="20250128 12:13:32.185" endtime="20250128 12:13:46.719"/>
+</kw>
+<kw name="OUVRIR KAABU PLUS" library="keywords">
+<kw name="Wait Until Page Contains Element" library="AppiumLibrary">
+<arg>${NINE_BUTTON_KAABUPLUS}</arg>
+<arg>timeout=10</arg>
+<doc>Waits until element specified with `locator` appears on current page.</doc>
+<msg timestamp="20250128 12:13:48.416" level="INFO">xpath criteria: //android.view.View[@content-desc="9"]</msg>
+<status status="PASS" starttime="20250128 12:13:46.722" endtime="20250128 12:13:48.416"/>
+</kw>
+<kw name="SAISIR CODE PIN KAABUPLUS" library="keywords">
+<kw name="Sleep" library="BuiltIn">
+<arg>2</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<msg timestamp="20250128 12:13:50.418" level="INFO">Slept 2 seconds</msg>
+<status status="PASS" starttime="20250128 12:13:48.417" endtime="20250128 12:13:50.418"/>
+</kw>
+<kw name="Wait Until Page Contains Element" library="AppiumLibrary">
+<arg>${NINE_BUTTON_KAABUPLUS}</arg>
+<arg>timeout=10</arg>
+<doc>Waits until element specified with `locator` appears on current page.</doc>
+<msg timestamp="20250128 12:13:50.593" level="INFO">xpath criteria: //android.view.View[@content-desc="9"]</msg>
+<status status="PASS" starttime="20250128 12:13:50.418" endtime="20250128 12:13:50.593"/>
+</kw>
+<kw name="Click Element" library="AppiumLibrary">
+<arg>${NINE_BUTTON_KAABUPLUS}</arg>
+<doc>Click element identified by `locator`.</doc>
+<msg timestamp="20250128 12:13:50.603" level="INFO">Clicking element 'xpath=//android.view.View[@content-desc="9"]'.</msg>
+<msg timestamp="20250128 12:13:50.812" level="INFO">xpath criteria: //android.view.View[@content-desc="9"]</msg>
+<status status="PASS" starttime="20250128 12:13:50.593" endtime="20250128 12:13:50.813"/>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<arg>1</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<msg timestamp="20250128 12:13:51.813" level="INFO">Slept 1 second</msg>
+<status status="PASS" starttime="20250128 12:13:50.813" endtime="20250128 12:13:51.813"/>
+</kw>
+<kw name="Click Element" library="AppiumLibrary">
+<arg>${NINE_BUTTON_KAABUPLUS}</arg>
+<doc>Click element identified by `locator`.</doc>
+<msg timestamp="20250128 12:13:51.819" level="INFO">Clicking element 'xpath=//android.view.View[@content-desc="9"]'.</msg>
+<msg timestamp="20250128 12:13:52.061" level="INFO">xpath criteria: //android.view.View[@content-desc="9"]</msg>
+<status status="PASS" starttime="20250128 12:13:51.813" endtime="20250128 12:13:52.062"/>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<arg>1</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<msg timestamp="20250128 12:13:53.062" level="INFO">Slept 1 second</msg>
+<status status="PASS" starttime="20250128 12:13:52.062" endtime="20250128 12:13:53.062"/>
+</kw>
+<kw name="Click Element" library="AppiumLibrary">
+<arg>${ZERO_BUTTON_KAABUPLUS}</arg>
+<doc>Click element identified by `locator`.</doc>
+<msg timestamp="20250128 12:13:53.069" level="INFO">Clicking element 'xpath=//android.view.View[@content-desc="0"]'.</msg>
+<msg timestamp="20250128 12:13:53.296" level="INFO">xpath criteria: //android.view.View[@content-desc="0"]</msg>
+<status status="PASS" starttime="20250128 12:13:53.062" endtime="20250128 12:13:53.296"/>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<arg>1</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<msg timestamp="20250128 12:13:54.297" level="INFO">Slept 1 second</msg>
+<status status="PASS" starttime="20250128 12:13:53.296" endtime="20250128 12:13:54.297"/>
+</kw>
+<kw name="Click Element" library="AppiumLibrary">
+<arg>${FOUR_BUTTON__KAABUPLUS}</arg>
+<doc>Click element identified by `locator`.</doc>
+<msg timestamp="20250128 12:13:54.306" level="INFO">Clicking element 'xpath=//android.view.View[@content-desc="4"]'.</msg>
+<msg timestamp="20250128 12:13:54.545" level="INFO">xpath criteria: //android.view.View[@content-desc="4"]</msg>
+<status status="PASS" starttime="20250128 12:13:54.297" endtime="20250128 12:13:54.545"/>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<arg>20000</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="FAIL" starttime="20250128 12:13:54.545" endtime="20250128 12:34:29.773"/>
+</kw>
+<status status="FAIL" starttime="20250128 12:13:48.416" endtime="20250128 12:34:29.773"/>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<arg>3s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="NOT RUN" starttime="20250128 12:34:29.774" endtime="20250128 12:34:29.774"/>
+</kw>
+<status status="FAIL" starttime="20250128 12:13:46.720" endtime="20250128 12:34:29.774"/>
+</kw>
+<kw name="DISTRI PAIEMENT SEN EAU" library="keywords">
+<status status="NOT RUN" starttime="20250128 12:34:29.775" endtime="20250128 12:34:29.775"/>
+</kw>
+<doc>Démarrage de l'application "KABU PLUS" sur le device "${DEVICE_NAME_RZCW30WHM4Y}</doc>
+<status status="FAIL" starttime="20250128 12:13:32.184" endtime="20250128 12:34:29.776">Execution terminated by signal</status>
+</test>
+<kw name="!SuiteTeardown" library="keywords" type="TEARDOWN">
+<kw name="Close All Applications" library="AppiumLibrary">
+<doc>Closes all open applications.</doc>
+<kw name="Capture Page Screenshot" library="AppiumLibrary">
+<doc>Takes a screenshot of the current page and embeds it into the log.</doc>
+<msg timestamp="20250128 12:34:29.836" level="FAIL">InvalidSessionIdException: Message: A session is either terminated or not started
+Stacktrace:
+NoSuchDriverError: A session is either terminated or not started
+    at asyncHandler (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\appium-base-driver\lib\protocol\protocol.js:243:15)
+    at C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\appium-base-driver\lib\protocol\protocol.js:423:15
+    at Layer.handle [as handle_request] (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\layer.js:95:5)
+    at next (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\route.js:137:13)
+    at Route.dispatch (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\route.js:112:3)
+    at Layer.handle [as handle_request] (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\layer.js:95:5)
+    at C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:281:22
+    at param (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:354:14)
+    at param (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:365:14)
+    at Function.process_params (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:410:3)
+    at next (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:275:10)
+    at logger (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\morgan\index.js:144:5)
+    at Layer.handle [as handle_request] (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:317:13)
+    at C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:284:7
+    at Function.process_params (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:335:12)
+    at next (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:275:10)
+    at jsonParser (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\body-parser\lib\types\json.js:110:7)
+    at Layer.handle [as handle_request] (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:317:13)
+    at C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:284:7
+    at Function.process_params (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:335:12)
+    at next (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:275:10)
+    at Layer.handle [as handle_request] (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\layer.js:91:12)
+    at trim_prefix (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:317:13)
+    at C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:284:7
+    at Function.process_params (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:335:12)
+    at next (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:275:10)</msg>
+<status status="FAIL" starttime="20250128 12:34:29.806" endtime="20250128 12:34:29.844"/>
+</kw>
+<msg timestamp="20250128 12:34:29.854" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: InvalidSessionIdException: Message: A session is either terminated or not started
+Stacktrace:
+NoSuchDriverError: A session is either terminated or not started
+    at asyncHandler (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\appium-base-driver\lib\protocol\protocol.js:243:15)
+    at C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\appium-base-driver\lib\protocol\protocol.js:423:15
+    at Layer.handle [as handle_request] (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\layer.js:95:5)
+    at next (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\route.js:137:13)
+    at Route.dispatch (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\route.js:112:3)
+    at Layer.handle [as handle_request] (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\layer.js:95:5)
+    at C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:281:22
+    at param (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:354:14)
+    [ Message content over the limit has been removed. ]
+...rces\app\node_modules\appium\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:317:13)
+    at C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:284:7
+    at Function.process_params (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:335:12)
+    at next (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:275:10)
+    at Layer.handle [as handle_request] (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\layer.js:91:12)
+    at trim_prefix (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:317:13)
+    at C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:284:7
+    at Function.process_params (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:335:12)
+    at next (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:275:10)</msg>
+<msg timestamp="20250128 12:34:29.860" level="FAIL">InvalidSessionIdException: Message: A session is either terminated or not started
+Stacktrace:
+NoSuchDriverError: A session is either terminated or not started
+    at asyncHandler (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\appium-base-driver\lib\protocol\protocol.js:243:15)
+    at C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\appium-base-driver\lib\protocol\protocol.js:423:15
+    at Layer.handle [as handle_request] (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\layer.js:95:5)
+    at next (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\route.js:137:13)
+    at Route.dispatch (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\route.js:112:3)
+    at Layer.handle [as handle_request] (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\layer.js:95:5)
+    at C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:281:22
+    at param (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:354:14)
+    at param (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:365:14)
+    at Function.process_params (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:410:3)
+    at next (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:275:10)
+    at logger (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\morgan\index.js:144:5)
+    at Layer.handle [as handle_request] (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:317:13)
+    at C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:284:7
+    at Function.process_params (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:335:12)
+    at next (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:275:10)
+    at jsonParser (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\body-parser\lib\types\json.js:110:7)
+    at Layer.handle [as handle_request] (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:317:13)
+    at C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:284:7
+    at Function.process_params (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:335:12)
+    at next (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:275:10)
+    at Layer.handle [as handle_request] (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\layer.js:91:12)
+    at trim_prefix (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:317:13)
+    at C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:284:7
+    at Function.process_params (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:335:12)
+    at next (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:275:10)</msg>
+<status status="FAIL" starttime="20250128 12:34:29.779" endtime="20250128 12:34:29.862"/>
+</kw>
+<status status="FAIL" starttime="20250128 12:34:29.778" endtime="20250128 12:34:29.862">InvalidSessionIdException: Message: A session is either terminated or not started
+Stacktrace:
+NoSuchDriverError: A session is either terminated or not started
+    at asyncHandler (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\appium-base-driver\lib\protocol\protocol.js:243:15)
+    at C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\appium-base-driver\lib\protocol\protocol.js:423:15
+    at Layer.handle [as handle_request] (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\layer.js:95:5)
+    at next (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\route.js:137:13)
+    at Route.dispatch (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\route.js:112:3)
+    at Layer.handle [as handle_request] (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\layer.js:95:5)
+    at C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:281:22
+    at param (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:354:14)
+    [ Message content over the limit has been removed. ]
+...rces\app\node_modules\appium\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:317:13)
+    at C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:284:7
+    at Function.process_params (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:335:12)
+    at next (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:275:10)
+    at Layer.handle [as handle_request] (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\layer.js:91:12)
+    at trim_prefix (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:317:13)
+    at C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:284:7
+    at Function.process_params (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:335:12)
+    at next (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:275:10)</status>
+</kw>
+<doc>TEST DE FONCTIONNALITE ABONNEMENT PAY PER VIEW SUR L'APPLICATION MAXIT LITE</doc>
+<status status="FAIL" starttime="20250128 12:13:31.210" endtime="20250128 12:34:29.863">Suite teardown failed:
+InvalidSessionIdException: Message: A session is either terminated or not started
+Stacktrace:
+NoSuchDriverError: A session is either terminated or not started
+    at asyncHandler (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\appium-base-driver\lib\protocol\protocol.js:243:15)
+    at C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\appium-base-driver\lib\protocol\protocol.js:423:15
+    at Layer.handle [as handle_request] (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\layer.js:95:5)
+    at next (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\route.js:137:13)
+    at Route.dispatch (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\route.js:112:3)
+    at Layer.handle [as handle_request] (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\layer.js:95:5)
+    at C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:281:22
+    at param (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:354:14)
+    [ Message content over the limit has been removed. ]
+...rces\app\node_modules\appium\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:317:13)
+    at C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:284:7
+    at Function.process_params (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:335:12)
+    at next (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:275:10)
+    at Layer.handle [as handle_request] (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\layer.js:91:12)
+    at trim_prefix (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:317:13)
+    at C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:284:7
+    at Function.process_params (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:335:12)
+    at next (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:275:10)</status>
+</suite>
+<statistics>
+<total>
+<stat pass="0" fail="1" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="0" fail="1" skip="0" id="s1" name="Kabu Plus Distri Paiement Sen Eau">Kabu Plus Distri Paiement Sen Eau</stat>
+</suite>
+</statistics>
+<errors>
+<msg timestamp="20250128 12:34:29.854" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: InvalidSessionIdException: Message: A session is either terminated or not started
+Stacktrace:
+NoSuchDriverError: A session is either terminated or not started
+    at asyncHandler (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\appium-base-driver\lib\protocol\protocol.js:243:15)
+    at C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\appium-base-driver\lib\protocol\protocol.js:423:15
+    at Layer.handle [as handle_request] (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\layer.js:95:5)
+    at next (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\route.js:137:13)
+    at Route.dispatch (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\route.js:112:3)
+    at Layer.handle [as handle_request] (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\layer.js:95:5)
+    at C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:281:22
+    at param (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:354:14)
+    [ Message content over the limit has been removed. ]
+...rces\app\node_modules\appium\node_modules\express\lib\router\layer.js:95:5)
+    at trim_prefix (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:317:13)
+    at C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:284:7
+    at Function.process_params (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:335:12)
+    at next (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:275:10)
+    at Layer.handle [as handle_request] (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\layer.js:91:12)
+    at trim_prefix (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:317:13)
+    at C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:284:7
+    at Function.process_params (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:335:12)
+    at next (C:\Program Files\Appium Server GUI\resources\app\node_modules\appium\node_modules\express\lib\router\index.js:275:10)</msg>
+</errors>
+</robot>
