@@ -623,3 +623,1840 @@ window.fileLoading = (function () {
     return {
         getCallbackHandlerForKeywords: getCallbackHandlerForKeywords,
         notify: notifyFileLoaded
+    }
+}());
+</script>
+<script type="text/javascript">
+window.model = (function () {
+    function Suite(data) {
+        var suite = createModelObject(data);
+        suite.source = data.source;
+        suite.relativeSource = data.relativeSource;
+        suite.fullName = data.parent ? data.parent.fullName + '.' + data.name : data.name;
+        suite.type = 'suite';
+        suite.template = 'suiteTemplate';
+        setStats(suite, data.statistics);
+        suite.metadata = data.metadata;
+        suite.populateKeywords = createIterablePopulator('Keyword');
+        suite.populateTests = createIterablePopulator('Test');
+        suite.populateSuites = createIterablePopulator('Suite');
+        suite.childrenNames = ['keyword', 'suite', 'test'];
+        suite.callWhenChildrenReady = function (callable) { callable(); };
+        suite.message = data.message;
+        suite.children = function () {
+            return suite.keywords().concat(suite.tests()).concat(suite.suites());
+        };
+        suite.searchTests = function (predicate) {
+            var tests = [];
+            var suites = this.suites();
+            for (var i in suites)
+                tests = tests.concat(suites[i].searchTests(predicate));
+            return tests.concat(util.filter(this.tests(), predicate));
+        };
+        suite.searchTestsInSuite = function (pattern, matcher) {
+            if (!matcher)
+                matcher = util.Matcher(pattern);
+            if (matcher.matchesAny([suite.fullName, suite.name]))
+                return suite.allTests();
+            var tests = [];
+            var suites = this.suites();
+            for (var i in suites)
+                tests = tests.concat(suites[i].searchTestsInSuite(pattern, matcher));
+            return tests;
+        };
+        suite.searchTestsByTag = function (tag) {
+            return suite.searchTests(function (test) {
+                if (tag.combined)
+                    return containsTagPattern(test.tags, tag.combined);
+                return containsTag(test.tags, tag.label);
+            });
+        };
+        suite.findSuiteByName = function (name) {
+            return findSuiteByName(suite, name);
+        };
+        suite.allTests = function () {
+            return suite.searchTests(function (test) {
+                return true;
+            });
+        };
+        return suite;
+    }
+    function containsTag(testTags, tagname) {
+        testTags = util.map(testTags, util.normalize);
+        return util.contains(testTags, util.normalize(tagname));
+    }
+    function containsTagPattern(testTags, pattern) {
+        var patterns;
+        if (pattern.indexOf('NOT') != -1) {
+            patterns = pattern.split('NOT');
+            if (!util.normalize(patterns[0]))
+                return util.all(util.map(patterns.slice(1), function (p) {
+                    return !containsTagPattern(testTags, p);
+                }));
+            return containsTagPattern(testTags, patterns[0]) &&
+                util.all(util.map(patterns.slice(1), function (p) {
+                    return !containsTagPattern(testTags, p);
+                }));
+        }
+        if (pattern.indexOf('OR') != -1) {
+            patterns = pattern.split('OR');
+            return util.any(util.map(patterns, function (p) {
+                return containsTagPattern(testTags, p);
+            }));
+        }
+        if (pattern.indexOf('AND') != -1) {
+            patterns = pattern.split('AND');
+            return util.all(util.map(patterns, function (p) {
+                return containsTagPattern(testTags, p);
+            }));
+        }
+        return util.Matcher(pattern).matchesAny(testTags);
+    }
+    function findSuiteByName(suite, name) {
+        if (suite.fullName == name)
+            return suite;
+        var subSuites = suite.suites();
+        for (var i in subSuites) {
+            var match = findSuiteByName(subSuites[i], name);
+            if (match)
+                return match;
+        }
+        return null;
+    }
+    function setStats(suite, stats) {
+        for (var name in stats) {
+            suite[name] = stats[name];
+        }
+    }
+    function createModelObject(data) {
+        return {
+            name: data.name,
+            doc: data.doc,
+            status: data.status,
+            times: data.times,
+            id: data.parent ? data.parent.id + '-' + data.id : data.id
+        };
+    }
+    function Test(data) {
+        var test = createModelObject(data);
+        test.type = 'test';
+        test.template = 'testTemplate';
+        test.fullName = data.parent.fullName + '.' + test.name;
+        test.formatParentName = function () { return util.formatParentName(test); };
+        test.timeout = data.timeout;
+        test.populateKeywords = createIterablePopulator('Keyword');
+        test.childrenNames = ['keyword'];
+        test.isChildrenLoaded = data.isChildrenLoaded;
+        test.callWhenChildrenReady = window.fileLoading.getCallbackHandlerForKeywords(test);
+        test.children = function () {
+            if (test.isChildrenLoaded)
+                return test.keywords();
+        };
+        test.tags = data.tags;
+        test.message = data.message;
+        test.matchesTagPattern = function (pattern) {
+            return containsTagPattern(test.tags, pattern);
+        };
+        test.matchesNamePattern = function (pattern) {
+            return util.Matcher(pattern).matchesAny([test.name, test.fullName]);
+        };
+        return test;
+    }
+    function Keyword(data) {
+        var kw = createModelObject(data);
+        var flatTypes = ['RETURN', 'BREAK', 'CONTINUE'];
+        kw.libname = data.libname;
+        kw.fullName = (kw.libname ? kw.libname + '.' : '') + kw.name;
+        kw.type = data.type;
+        kw.template = 'keywordTemplate';
+        kw.arguments = data.args;
+        kw.assign = data.assign + (data.assign ? ' =' : '');
+        kw.tags = data.tags;
+        kw.timeout = data.timeout;
+        kw.populateKeywords = createIterablePopulator('Keyword');
+        kw.childrenNames = ['keyword'];
+        kw.isChildrenLoaded = data.isChildrenLoaded;
+        kw.callWhenChildrenReady = window.fileLoading.getCallbackHandlerForKeywords(kw);
+        kw.children = function () {
+            if (kw.isChildrenLoaded)
+                return kw.keywords();
+        };
+        return kw;
+    }
+    function Message(level, date, text, link) {
+        var message = {
+            type: 'message',
+            template: 'messageTemplate',
+            level: level,
+            time: util.timeFromDate(date),
+            date: util.dateFromDate(date),
+            text: text,
+            link: link
+        };
+        message.callWhenChildrenReady = function (callable) { callable(); };
+        return message;
+    }
+    function Times(timedata) {
+        var start = timedata[0];
+        var end = timedata[1];
+        var elapsed = timedata[2];
+        return {
+            elapsedMillis: elapsed,
+            elapsedTime: util.formatElapsed(elapsed),
+            startTime: util.dateTimeFromDate(start),
+            endTime:  util.dateTimeFromDate(end)
+        };
+    }
+    function createIterablePopulator(name) {
+        return function (populator) {
+            populateIterable(this, name, populator);
+        };
+    }
+    function populateIterable(obj, name, populator) {
+        name = name.toLowerCase() + 's';
+        obj[name] = createGetAllFunction(populator.numberOfItems, populator.creator);
+    }
+    function createGetAllFunction(numberOfElements, creator) {
+        var cached = null;
+        return function () {
+            if (cached === null) {
+                cached = [];
+                for (var i = 0; i < numberOfElements(); i++) {
+                    cached.push(creator(i));
+                }
+            }
+            return cached;
+        };
+    }
+    return {
+        Suite: Suite,
+        Test: Test,
+        Keyword: Keyword,
+        Message: Message,
+        Times: Times,
+        containsTag: containsTag,  // Exposed for tests
+        containsTagPattern: containsTagPattern  // Exposed for tests
+    };
+}());
+window.stats = (function () {
+    function Statistics(totalElems, tagElems, suiteElems) {
+        return {total: util.map(totalElems, totalStatElem),
+                tag:   util.map(tagElems, tagStatElem),
+                suite: util.map(suiteElems, suiteStatElem)};
+    }
+    function statElem(stat) {
+        stat.total = stat.pass + stat.fail + stat.skip;
+        var percents = calculatePercents(stat.total, stat.pass, stat.fail, stat.skip);
+        stat.passPercent = percents[0];
+        stat.skipPercent = percents[1];
+        stat.failPercent = percents[2];
+        var widths = calculateWidths(stat.passPercent, stat.skipPercent, stat.failPercent);
+        stat.passWidth = widths[0];
+        stat.skipWidth = widths[1];
+        stat.failWidth = widths[2];
+        return stat;
+    }
+    function totalStatElem(data) {
+        var stat = statElem(data);
+        stat.type = 'all';
+        return stat;
+    }
+    function tagStatElem(data) {
+        var stat = statElem(data);
+        stat.links = parseLinks(stat.links);
+        return stat;
+    }
+    function suiteStatElem(data) {
+        var stat = statElem(data);
+        stat.fullName = stat.label;
+        stat.formatParentName = function () { return util.formatParentName(stat); };
+        return stat;
+    }
+    function parseLinks(linksData) {
+        if (!linksData)
+            return [];
+        return util.map(linksData.split(':::'), function (link) {
+                var index = link.indexOf(':');
+                return {title: link.slice(0, index), url: link.slice(index+1)};
+            });
+    }
+    function calculatePercents(total, passed, failed, skipped) {
+        if (total == 0) {
+            return [0.0, 0.0, 0.0];
+        }
+        var pass = 100.0 * passed / total;
+        var skip = 100.0 * skipped / total;
+        var fail = 100.0 * failed / total;
+        if (pass > 0 && pass < 0.1)
+            pass = 0.1
+        if (fail > 0 && fail < 0.1)
+            fail = 0.1
+        if (skip > 0 && skip < 0.1)
+            skip = 0.1
+        if (pass > 99.95 && pass < 100)
+            pass = 99.9
+        if (fail > 99.95 && fail < 100)
+            fail = 99.9
+        if (skip > 99.95 && skip < 100)
+            skip = 99.9
+        return [Math.round(pass*10)/10, Math.round(skip*10)/10, Math.round(fail*10)/10];
+    }
+    function calculateWidths(num1, num2, num3) {
+        if (num1 + num2 + num3 === 0)
+            return [0.0, 0.0, 0.0];
+        // Make small percentages better visible
+        if (num1 > 0 && num1 < 1)
+            num1 = 1
+        if (num2 > 0 && num2 < 1)
+            num2 = 1
+        if (num3 > 0 && num3 < 1)
+            num3 = 1
+        // Handle situation where some are rounded up
+        while (num1 + num2 + num3 > 100) {
+            if (num1 > num2 && num1 > num3)
+                num1 -= 0.1;
+            else if (num2 > num1 && num2 > num3)
+                num2 -= 0.1;
+            else if (num3 > num1 && num3 > num2)
+                num3 -= 0.1;
+            else if (num1 > num3 && num1 == num2) {
+                num1 -= 0.1;
+                num2 -= 0.1;
+            }
+            else if (num1 > num2 && num1 == num3) {
+                num1 -= 0.1;
+                num3 -= 0.1;
+            }
+            else if (num2 > num1 && num2 == num3) {
+                num2 -= 0.1;
+                num3 -= 0.1;
+            }
+        }
+        return [Math.ceil(num1*10)/10, Math.ceil(num2*10)/10, Math.ceil(num3*10)/10];
+    }
+    return {
+        Statistics: Statistics
+    };
+}());
+</script>
+<script type="text/javascript">
+window.util = function () {
+    function map(elems, func) {
+        var ret = [];
+        for (var i = 0, len = elems.length; i < len; i++) {
+            ret[i] = func(elems[i]);
+        }
+        return ret;
+    }
+    function filter(elems, predicate) {
+        var ret = [];
+        for (var i = 0, len = elems.length; i < len; i++) {
+            if (predicate(elems[i]))
+                ret.push(elems[i]);
+        }
+        return ret;
+    }
+    function all(elems) {
+        for (var i = 0, len = elems.length; i < len; i++) {
+            if (!elems[i])
+                return false;
+        }
+        return true;
+    }
+    function any(elems) {
+        for (var i = 0, len = elems.length; i < len; i++) {
+            if (elems[i])
+                return elems[i];
+        }
+        return false;
+    }
+    function contains(elems, e) {
+        for (var i = 0, len = elems.length; i < len; i++) {
+            if (elems[i] == e)
+                return true;
+        }
+        return false;
+    }
+    function last(items) {
+        return items[items.length-1];
+    }
+    function unescape(string) {
+        return string.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+    }
+    function escape(string) {
+        return string.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+    function normalize(string) {
+        return string.toLowerCase().replace(/ /g, '').replace(/_/g, '');
+    }
+    function regexpEscape(string) {
+        return string.replace(/[-[\]{}()+?*.,\\^$|#]/g, "\\$&");
+    }
+    function Matcher(pattern) {
+        pattern = regexpEscape(normalize(pattern));
+        var rePattern = '^' + pattern.replace(/\\\?/g, '.').replace(/\\\*/g, '[\\s\\S]*') + '$';
+        var regexp = new RegExp(rePattern);
+        function matches(string) {
+            return regexp.test(normalize(string));
+        }
+        return {
+            matches: matches,
+            matchesAny: function (strings) {
+                for (var i = 0, len = strings.length; i < len; i++)
+                    if (matches(strings[i]))
+                        return true;
+                return false;
+            }
+        };
+    }
+    function formatParentName(item) {
+        var parentName = item.fullName.slice(0, item.fullName.length - item.name.length);
+        return parentName.replace(/\./g, ' . ');
+    }
+    function timeFromDate(date) {
+        if (!date)
+            return 'N/A';
+        return formatTime(date.getHours(), date.getMinutes(),
+                          date.getSeconds(), date.getMilliseconds());
+    }
+    function dateFromDate(date) {
+        if (!date)
+            return 'N/A';
+        return padTo(date.getFullYear(), 4) +
+               padTo(date.getMonth() + 1, 2) +
+               padTo(date.getDate(), 2);
+    }
+    function dateTimeFromDate(date) {
+        if (!date)
+            return 'N/A';
+        return dateFromDate(date) + ' ' + timeFromDate(date);
+    }
+    function formatTime(hours, minutes, seconds, milliseconds) {
+        return padTo(hours, 2) + ':' +
+               padTo(minutes, 2) + ':' +
+               padTo(seconds, 2) + '.' +
+               padTo(milliseconds, 3);
+    }
+    function formatElapsed(elapsed) {
+        var millis = elapsed;
+        var hours = Math.floor(millis / (60 * 60 * 1000));
+        millis -= hours * 60 * 60 * 1000;
+        var minutes = Math.floor(millis / (60 * 1000));
+        millis -= minutes * 60 * 1000;
+        var seconds = Math.floor(millis / 1000);
+        millis -= seconds * 1000;
+        return formatTime(hours, minutes, seconds, millis);
+    }
+    function padTo(number, len) {
+        var numString = number + "";
+        while (numString.length < len) numString = "0" + numString;
+        return numString;
+    }
+    function timestamp(millis) {
+        // used also by tools that do not set window.output.baseMillis
+        var base = window.output ? window.output.baseMillis : 0;
+        return new Date(base + millis);
+    }
+    function createGeneratedString(timestamp) {
+        var date = new Date(timestamp);
+        var dt = dateTimeFromDate(date).slice(0, 17);  // drop millis
+        var offset = date.getTimezoneOffset();
+        var sign = offset > 0 ? '-' : '+';
+        var hh = Math.floor(Math.abs(offset) / 60);
+        var mm = Math.abs(offset) % 60;
+        return dt + ' UTC' + sign + padTo(hh, 2) + ':' + padTo(mm, 2);
+    }
+    function createGeneratedAgoString(timestamp) {
+        function timeString(time, shortUnit) {
+            var unit = {y: 'year', d: 'day', h: 'hour', m: 'minute',
+                        s: 'second'}[shortUnit];
+            var end = time == 1 ? ' ' : 's ';
+            return time + ' ' + unit + end;
+        }
+        function compensateLeapYears(days, years) {
+            // Not a perfect algorithm but ought to be enough
+            return days - Math.floor(years / 4);
+        }
+        var generated = Math.round(timestamp / 1000);
+        var current = Math.round(new Date().getTime() / 1000);
+        var elapsed = current - generated;
+        var prefix = '';
+        if (elapsed < 0) {
+            prefix = '- ';
+            elapsed = Math.abs(elapsed);
+        }
+        var secs  = elapsed % 60;
+        var mins  = Math.floor(elapsed / 60) % 60;
+        var hours = Math.floor(elapsed / (60*60)) % 24;
+        var days  = Math.floor(elapsed / (60*60*24)) % 365;
+        var years = Math.floor(elapsed / (60*60*24*365));
+        if (years) {
+            days = compensateLeapYears(days, years);
+            return prefix + timeString(years, 'y') + timeString(days, 'd');
+        } else if (days) {
+            return prefix + timeString(days, 'd') + timeString(hours, 'h');
+        } else if (hours) {
+            return prefix + timeString(hours, 'h') + timeString(mins, 'm');
+        } else if (mins) {
+            return prefix + timeString(mins, 'm') + timeString(secs, 's');
+        } else {
+            return prefix + timeString(secs, 's');
+        }
+    }
+    function parseQueryString(query) {
+        var result = {};
+        if (!query)
+            return result;
+        var params = query.split('&');
+        var parts;
+        function decode(item) {
+            return decodeURIComponent(item.replace('+', ' '));
+        }
+        for (var i = 0, len = params.length; i < len; i++) {
+            parts = params[i].split('=');
+            result[decode(parts.shift())] = decode(parts.join('='));
+        }
+        return result;
+    }
+    return {
+        map: map,
+        filter: filter,
+        all: all,
+        any: any,
+        contains: contains,
+        last: last,
+        escape: escape,
+        unescape: unescape,
+        normalize: normalize,
+        regexpEscape: regexpEscape,
+        Matcher: Matcher,
+        formatParentName: formatParentName,
+        timeFromDate: timeFromDate,
+        dateFromDate: dateFromDate,
+        dateTimeFromDate: dateTimeFromDate,
+        formatElapsed: formatElapsed,
+        timestamp: timestamp,
+        createGeneratedString: createGeneratedString,
+        createGeneratedAgoString: createGeneratedAgoString,
+        parseQueryString: parseQueryString
+    };
+}();
+</script>
+<script type="text/javascript">
+window.testdata = function () {
+    var elementsById = {};
+    var idCounter = 0;
+    var _statistics = null;
+    var LEVELS = ['TRACE', 'DEBUG', 'INFO', 'WARN', 'ERROR', 'FAIL', 'SKIP'];
+    var STATUSES = ['FAIL', 'PASS', 'SKIP', 'NOT RUN'];
+    var KEYWORD_TYPES = ['KEYWORD', 'SETUP', 'TEARDOWN', 'FOR', 'ITERATION', 'IF', 'ELSE IF', 'ELSE', 'RETURN',
+                         'TRY', 'EXCEPT', 'FINALLY', 'WHILE', 'CONTINUE', 'BREAK', 'ERROR'];
+    function addElement(elem) {
+        if (!elem.id)
+            elem.id = uniqueId();
+        elementsById[elem.id] = elem;
+        return elem;
+    }
+    function uniqueId() {
+        idCounter++;
+        return 'element-id-' + idCounter;
+    }
+    function times(stats) {
+        var startMillis = stats[1];
+        var elapsed = stats[2];
+        if (startMillis === null)
+            return [null, null, elapsed];
+        return [util.timestamp(startMillis),
+                util.timestamp(startMillis + elapsed),
+                elapsed];
+    }
+    function createMessage(element, strings) {
+        return model.Message(LEVELS[element[1]],
+                             util.timestamp(element[0]),
+                             strings.get(element[2]),
+                             strings.get(element[3]));
+    }
+    function parseStatus(stats) {
+        return STATUSES[stats[0]];
+    }
+    function childCreator(parent, childType) {
+        return function (elem, strings, index) {
+            return addElement(childType(parent, elem, strings, index));
+        };
+    }
+    function createBodyItem(parent, element, strings, index) {
+        if (element.length < 5)
+            return createMessage(element, strings);
+        var messages = util.filter(parent.children(), function (child) {
+            return child.type == 'message';
+        })
+        return createKeyword(parent, element, strings, index - messages.length);
+    }
+    function createKeyword(parent, element, strings, index) {
+        var kw = model.Keyword({
+            parent: parent,
+            type: KEYWORD_TYPES[element[0]],
+            id: 'k' + (index + 1),
+            name: strings.get(element[1]),
+            libname: strings.get(element[2]),
+            timeout: strings.get(element[3]),
+            args: strings.get(element[5]),
+            assign: strings.get(element[6]),
+            tags: strings.get(element[7]),
+            doc: function () {
+                var doc = strings.get(element[4]);
+                this.doc = function () { return doc; };
+                return doc;
+            },
+            status: parseStatus(element[8], strings),
+            times: model.Times(times(element[8])),
+            isChildrenLoaded: typeof(element[9]) !== 'number'
+        });
+        lazyPopulateKeywordsFromFile(kw, element[9], strings);
+        return kw;
+    }
+    function lazyPopulateKeywordsFromFile(parent, modelOrIndex, strings) {
+        var model, index, populator;
+        var creator = childCreator(parent, createBodyItem);
+        if (parent.isChildrenLoaded) {
+            model = modelOrIndex;
+            populator = Populator(model, strings, creator);
+        } else {
+            index = modelOrIndex;
+            parent.childFileName = window.settings['splitLogBase'] + '-' + index + '.js';
+            populator = SplitLogPopulator(index, creator);
+        }
+        parent.populateKeywords(populator);
+    }
+    function tags(taglist, strings) {
+        return util.map(taglist, strings.get);
+    }
+    function createTest(parent, element, strings, index) {
+        var status = element[4];
+        var test = model.Test({
+            parent: parent,
+            id: 't' + (index + 1),
+            name: strings.get(element[0]),
+            doc: function () {
+                var doc = strings.get(element[2]);
+                this.doc = function () { return doc; };
+                return doc;
+            },
+            timeout: strings.get(element[1]),
+            status: parseStatus(status),
+            message: function () {
+                var msg = status.length == 4 ? strings.get(status[3]) : '';
+                this.message = function () { return msg; };
+                return msg;
+            },
+            times: model.Times(times(status)),
+            tags: tags(element[3], strings),
+            isChildrenLoaded: typeof(element[5]) !== 'number'
+        });
+        lazyPopulateKeywordsFromFile(test, element[5], strings);
+        return test;
+    }
+    function createSuite(parent, element, strings, index) {
+        var status = element[5];
+        var suite = model.Suite({
+            parent: parent,
+            id: 's' + ((index || 0) + 1),
+            name: strings.get(element[0]),
+            source: strings.get(element[1]),
+            relativeSource: strings.get(element[2]),
+            doc: function () {
+                var doc = strings.get(element[3]);
+                this.doc = function () { return doc; };
+                return doc;
+            },
+            status: parseStatus(status),
+            message: function () {
+                var msg = status.length == 4 ? strings.get(status[3]) : '';
+                this.message = function () { return msg; };
+                return msg;
+            },
+            times: model.Times(times(status)),
+            statistics: suiteStats(util.last(element)),
+            metadata: parseMetadata(element[4], strings)
+        });
+        suite.populateKeywords(Populator(element[8], strings, childCreator(suite, createKeyword)));
+        suite.populateTests(Populator(element[7], strings, childCreator(suite, createTest)));
+        suite.populateSuites(Populator(element[6], strings, childCreator(suite, createSuite)));
+        return suite;
+    }
+    function parseMetadata(data, strings) {
+        var metadata = [];
+        for (var i=0; i<data.length; i+=2) {
+            metadata.push([strings.get(data[i]), strings.get(data[i+1])]);
+        }
+        return metadata;
+    }
+    function suiteStats(stats) {
+        return {
+            total: stats[0],
+            pass: stats[1],
+            fail: stats[2],
+            skip: stats[3]
+        };
+    }
+    function Populator(items, strings, creator) {
+        return {
+            numberOfItems: function () {
+                return items.length;
+            },
+            creator: function (index) {
+                return creator(items[index], strings, index);
+            }
+        };
+    }
+    function SplitLogPopulator(structureIndex, creator) {
+        return {
+            numberOfItems: function () {
+                return window['keywords'+structureIndex].length;
+            },
+            creator: function (index) {
+                return creator(window['keywords'+structureIndex][index],
+                               StringStore(window['strings'+structureIndex]),
+                               index);
+            }
+        };
+    }
+    function suite() {
+        var elem = window.output.suite;
+        if (elementsById[elem.id])
+            return elem;
+        var root = addElement(createSuite(null, elem, StringStore(window.output.strings)));
+        window.output.suite = root;
+        return root;
+    }
+    function findLoaded(id) {
+        return elementsById[id];
+    }
+    function ensureLoaded(id, callback) {
+        var ids = id.split('-');
+        var root = suite();
+        ids.shift();
+        loadItems(ids, root, [root.id], callback);
+    }
+    function loadItems(ids, current, result, callback) {
+        if (!ids.length) {
+            callback(result);
+            return;
+        }
+        current.callWhenChildrenReady(function () {
+            var id = ids.shift();
+            var type = id[0];
+            var index = parseInt(id.substring(1)) - 1;
+            var item = selectFrom(current, type, index);
+            if (item)
+                result.push(item.id);
+            else    // Invalid id. Should this be reported somewhere?
+                ids = [];
+            loadItems(ids, item, result, callback);
+        });
+    }
+    function selectFrom(element, type, index) {
+        if (type === 'k') {
+            var keywords = util.filter(element.keywords(), function (kw) {
+                return kw.type != 'message';
+            });
+            return keywords[index];
+        } else if (type === 't') {
+            return element.tests()[index];
+        } else {
+            return element.suites()[index];
+        }
+    }
+    function errorIterator() {
+        return {
+            next: function () {
+                return addElement(createMessage(window.output.errors.shift(),
+                                                StringStore(window.output.strings)));
+            },
+            hasNext: function () {
+                return window.output.errors.length > 0;
+            }
+        };
+    }
+    function statistics() {
+        if (!_statistics) {
+            var statData = window.output.stats;
+            _statistics = stats.Statistics(statData[0], statData[1], statData[2]);
+        }
+        return _statistics;
+    }
+    function StringStore(strings) {
+        function getText(id) {
+            var text = strings[id];
+            if (!text)
+                return '';
+            if (text[0] == '*')
+                return text.substring(1);
+            var extracted = extract(text);
+            strings[id] = '*' + extracted;
+            return extracted;
+        }
+        function extract(text) {
+            var decoded = JXG.Util.Base64.decodeAsArray(text);
+            var extracted = (new JXG.Util.Unzip(decoded)).unzip()[0][0];
+            return JXG.Util.UTF8.decode(extracted);
+        }
+        function get(id) {
+            if (id === null) return null;
+            return getText(id);
+        }
+        return {get: get};
+    }
+    return {
+        suite: suite,
+        errorIterator: errorIterator,
+        findLoaded: findLoaded,
+        ensureLoaded: ensureLoaded,
+        statistics: statistics,
+        StringStore: StringStore,  // exposed for tests
+        LEVELS: LEVELS
+    };
+}();
+</script>
+<script type="text/javascript">
+function removeJavaScriptDisabledWarning() {
+    // Not using jQuery here for maximum speed
+    document.getElementById('javascript-disabled').style.display = 'none';
+}
+function addJavaScriptDisabledWarning(error) {
+    if (window.console)
+        console.error('Opening failed: ' + error.name + ': ' + error.message);
+    document.getElementById('javascript-disabled').style.display = 'block';
+}
+function initLayout(suiteName, type) {
+    parseTemplates();
+    setTitle(suiteName, type);
+    addHeader();
+    addReportOrLogLink(type);
+}
+function parseTemplates() {
+    $('script[type="text/x-jquery-tmpl"]').map(function (idx, elem) {
+        $.template(elem.id, elem.text);
+    });
+}
+function testOrTask(text) {
+    return text.replace(/{(.*)}/, function (match, group, offset, string) {
+        if (!window.settings.rpa)
+            return group;
+        return {'TEST': 'TASK', 'Test': 'Task', 'test': 'task'}[group];
+    });
+}
+function setTitle(suiteName, type) {
+    var givenTitle = window.settings.title;
+    var title = givenTitle ? givenTitle : suiteName + " " + type;
+    document.title = util.unescape(title);
+}
+function addHeader() {
+    var generated = util.timestamp(window.output.generated);
+    $.tmpl('<h1>${title}</h1>' +
+           '<div id="generated">' +
+             '<span>Generated<br>${generated}</span><br>' +
+             '<span id="generated-ago">${ago} ago</span>' +
+           '</div>' +
+           '<div id="top-right-header">' +
+             '<div id="report-or-log-link"><a href="#"></a></div>' +
+           '</div>', {
+        generated: util.createGeneratedString(generated),
+        ago: util.createGeneratedAgoString(generated),
+        title: document.title
+    }).appendTo($('#header'));
+}
+function addReportOrLogLink(myType) {
+    var url;
+    var text;
+    var container = $('#report-or-log-link');
+    if (myType == 'Report') {
+        url = window.settings.logURL;
+        text = 'LOG';
+    } else {
+        url = window.settings.reportURL;
+        text = 'REPORT';
+    }
+    if (url) {
+        container.find('a').attr('href', url);
+        container.find('a').text(text);
+    } else {
+        container.remove();
+    }
+}
+function addStatistics() {
+    var statHeaders =
+        '<th class="stats-col-stat">Total</th>' +
+        '<th class="stats-col-stat">Pass</th>' +
+        '<th class="stats-col-stat">Fail</th>' +
+        '<th class="stats-col-stat">Skip</th>' +
+        '<th class="stats-col-elapsed">Elapsed</th>' +
+        '<th class="stats-col-graph">Pass / Fail / Skip</th>';
+    var statTable =
+        '<h2>{Test} Statistics</h2>' +
+        '<table class="statistics" id="total-stats"><thead><tr>' +
+        '<th class="stats-col-name">Total Statistics</th>' + statHeaders +
+        '</tr></thead></table>' +
+        '<table class="statistics" id="tag-stats"><thead><tr>' +
+        '<th class="stats-col-name">Statistics by Tag</th>' + statHeaders +
+        '</tr></thead></table>' +
+        '<table class="statistics" id="suite-stats"><thead><tr>' +
+        '<th class="stats-col-name">Statistics by Suite</th>' + statHeaders +
+        '</tr></thead></table>';
+    $(testOrTask(statTable)).appendTo('#statistics-container');
+    util.map(['total', 'tag', 'suite'], addStatTable);
+    addTooltipsToElapsedTimes();
+    enableStatisticsSorter();
+}
+function addTooltipsToElapsedTimes() {
+    $('.stats-col-elapsed').attr('title',
+        testOrTask('Total execution time of these {test}s. ') +
+        'Excludes suite setups and teardowns.');
+    $('#suite-stats').find('.stats-col-elapsed').attr('title',
+        'Total execution time of this suite.');
+}
+function enableStatisticsSorter() {
+    $.tablesorter.addParser({
+        id: 'statName',
+        type: 'numeric',
+        is: function(s) {
+            return false;  // do not auto-detect
+        },
+        format: function(string, table, cell, cellIndex) {
+            // Rows have class in format 'row-<index>'.
+            var index = $(cell).parent().attr('class').substring(4);
+            return parseInt(index);
+        }
+    });
+    $(".statistics").tablesorter({
+        sortInitialOrder: 'desc',
+        headers: {0: {sorter: 'statName', sortInitialOrder: 'asc'},
+                  6: {sorter: false}}
+    });
+}
+function addStatTable(tableName) {
+    var stats = window.testdata.statistics()[tableName];
+    if (tableName == 'tag' && stats.length == 0) {
+        renderNoTagStatTable();
+    } else {
+        renderStatTable(tableName, stats);
+    }
+}
+function renderNoTagStatTable() {
+    $('<tbody><tr class="row-0">' +
+        '<td class="stats-col-name">No Tags</td>' +
+        '<td class="stats-col-stat"></td>' +
+        '<td class="stats-col-stat"></td>' +
+        '<td class="stats-col-stat"></td>' +
+        '<td class="stats-col-stat"></td>' +
+        '<td class="stats-col-elapsed"></td>' +
+        '<td class="stats-col-graph">' +
+          '<div class="empty-graph"></div>' +
+        '</td>' +
+      '</tr></tbody>').appendTo('#tag-stats');
+}
+function renderStatTable(tableName, stats) {
+    var template = tableName + 'StatisticsRowTemplate';
+    var tbody = $('<tbody></tbody>');
+    for (var i = 0, len = stats.length; i < len; i++) {
+        $.tmpl(template, stats[i], {index: i}).appendTo(tbody);
+    }
+    tbody.appendTo('#' + tableName + '-stats');
+}
+$.template('statColumnsTemplate',
+    '<td class="stats-col-stat">${total}</td>' +
+    '<td class="stats-col-stat">${pass}</td>' +
+    '<td class="stats-col-stat">${fail}</td>' +
+    '<td class="stats-col-stat">${skip}</td>' +
+    '<td class="stats-col-elapsed">${elapsed}</td>' +
+    '<td class="stats-col-graph">' +
+      '{{if total}}' +
+      '<div class="graph">' +
+        '<div class="pass-bar" style="width: ${passWidth}%" title="${passPercent}%"></div>' +
+        '<div class="fail-bar" style="width: ${failWidth}%" title="${failPercent}%"></div>' +
+        '<div class="skip-bar" style="width: ${skipWidth}%" title="${skipPercent}%"></div>' +
+      '</div>' +
+      '{{else}}' +
+      '<div class="empty-graph"></div>' +
+      '{{/if}}' +
+    '</td>'
+);
+$.template('suiteStatusMessageTemplate',
+    '${total} {{= testOrTask("{test}")}}{{if total != 1}}s{{/if}} total, ' +
+    '${pass} passed, ${fail} failed, ${skip} skipped'
+);
+// For complete cross-browser experience..
+// http://www.quirksmode.org/js/events_order.html
+function stopPropagation(event) {
+    var event = event || window.event;
+    event.cancelBubble = true;
+    if (event.stopPropagation)
+        event.stopPropagation();
+}
+</script>
+<script type="text/javascript">
+storage = function () {
+    var prefix = 'robot-framework-';
+    var storage;
+    function init(user) {
+        prefix += user + '-';
+        storage = getStorage();
+    }
+    function getStorage() {
+        // Use localStorage if it's accessible, normal object otherwise.
+        // Inspired by https://stackoverflow.com/questions/11214404
+        try {
+            localStorage.setItem(prefix, prefix);
+            localStorage.removeItem(prefix);
+            return localStorage;
+        } catch (exception) {
+            return {};
+        }
+    }
+    function get(name, defaultValue) {
+        var value = storage[prefix + name];
+        if (typeof value === 'undefined')
+            return defaultValue;
+        return value;
+    }
+    function set(name, value) {
+        storage[prefix + name] = value;
+    }
+    return {init: init, get: get, set: set};
+}();
+</script>
+<script type="text/javascript">
+window.output = {};
+</script>
+<script type="text/javascript">
+window.output["suite"] = [1,2,3,4,[],[1,0,31258],[],[[5,0,6,[],[1,401,30261],[]]],[],[1,1,0,0]];
+</script>
+<script type="text/javascript">
+window.output["strings"] = [];
+</script>
+<script type="text/javascript">
+window.output["strings"] = window.output["strings"].concat(["*","*Kabu Plus Distri Grille Commission","*C:\\Users\\LENOVO\\Desktop\\Stage sonatel\\Codes_supervision\\Appium\\maxit_lite\\kabu_plus_distri_grille_commission.robot","*kabu_plus_distri_grille_commission.robot","*<p>TEST DE FONCTIONNALITE ABONNEMENT PAY PER VIEW SUR L'APPLICATION MAXIT LITE\x3c/p>","*01_kabu_plus_achat_rapido","*<p>Démarrage de l'application \"KABU PLUS\" sur le device \"${DEVICE_NAME_RZCW30WHM4Y}\x3c/p>"]);
+</script>
+<script type="text/javascript">
+window.output["stats"] = [[{"elapsed":"00:00:30","fail":0,"label":"All Tests","pass":1,"skip":0}],[],[{"elapsed":"00:00:31","fail":0,"id":"s1","label":"Kabu Plus Distri Grille Commission","name":"Kabu Plus Distri Grille Commission","pass":1,"skip":0}]];
+</script>
+<script type="text/javascript">
+window.output["baseMillis"] = 1738229222591;
+</script>
+<script type="text/javascript">
+window.output["generated"] = 31288;
+</script>
+<script type="text/javascript">
+window.output["expand_keywords"] = null;
+</script>
+<script type="text/javascript">
+window.settings = {"background":{"fail":"#f66","pass":"#9e9","skip":"#fed84f"},"logURL":"log.html","rpa":false,"title":""};
+</script>
+<title></title>
+</head>
+<body>
+<div id="javascript-disabled">
+  <h1>Opening Robot Framework report failed</h1>
+  <ul>
+    <li>Verify that you have <b>JavaScript enabled</b> in your browser.</li>
+    <li>Make sure you are using a <b>modern enough browser</b>. If using Internet Explorer, version 11 is required.</li>
+    <li>Check are there messages in your browser's <b>JavaScript error log</b>. Please report the problem if you suspect you have encountered a bug.</li>
+  </ul>
+</div>
+<script type="text/javascript">removeJavaScriptDisabledWarning();</script>
+
+<div id="header"></div>
+<div id="statistics-container"></div>
+<div id="test-details-container"></div>
+
+<script type="text/javascript">
+$(document).ready(function () {
+    try {
+        var topsuite = window.testdata.suite();
+    } catch (error) {
+        addJavaScriptDisabledWarning(error);
+        return;
+    }
+    window.prevLocationHash = '';
+    setBackground(topsuite);
+    initLayout(topsuite.name, 'Report');
+    storage.init('report');
+    addSummary(topsuite);
+    addStatistics();
+    addDetails();
+    window.onhashchange = showDetailsByHash;
+});
+
+function setBackground(topsuite) {
+    var color;
+    if (topsuite.fail)
+        color = window.settings.background.fail;
+    else if (topsuite.pass)
+        color = window.settings.background.pass;
+    else
+        color = window.settings.background.skip;
+    $('body').css('background-color', color);
+}
+
+function addSummary(topsuite) {
+    var opts = {logURL: window.settings.logURL};
+    $.tmpl('summaryTableTemplate', topsuite, opts).insertAfter($('#header'));
+}
+
+function addDetails() {
+    addCustomSortersForDetails();
+    if (window.location.hash)
+        showDetailsByHash();
+    else
+        renderSearchSelector();
+}
+
+function addCustomSortersForDetails() {
+    $.tablesorter.addParser({
+        id: 'status',
+        type: 'numeric',
+        is: function(s) {
+            return false;  // do not auto-detect
+        },
+        format: function(s) {
+            return {'FAIL': -1, 'SKIP': 0, 'PASS': 1}[s];
+        }
+    });
+    $.tablesorter.addParser({
+        id: 'times',
+        type: 'text',
+        is: function(s) {
+            return false;  // do not auto-detect
+        },
+        format: function(s) {
+            return s.substring(0, 21);  // return only start time
+        }
+    });
+}
+
+function showDetailsByHash() {
+    // Cannot use window.location.hash because Firefox incorrectly decodes it:
+    // http://stackoverflow.com/questions/1703552/encoding-of-window-location-hash
+    var hash = window.location.href.split('#').slice(1).join('#');
+    if (!hash || hash == window.prevLocationHash)
+        return;
+    var parts = hash.split('?');
+    var name = parts.shift();
+    var query = parts.join('?');
+    if (name == 'search') {
+        var params = util.parseQueryString(query);
+        searchExecuted(params.suite || '', params.test || '',
+                       params.include || '', params.exclude || '');
+        return;
+    }
+    query = decodeURIComponent(query);
+    var action = {'totals': totalDetailSelected,
+                  'tags':   tagDetailSelected,
+                  'suites': suiteDetailSelected}[name];
+    if (action)
+        action(query);
+}
+
+function totalDetailSelected() {
+    renderTotalSelector();
+    scrollToSelector('totals', name);
+}
+
+function renderTotalSelector() {
+    var args = {linkTarget: 'totals',
+                totalTabStatus: 'detail-tab-selected'};
+    renderSelector(args, 'totalDetailsSelectorTemplate');
+    updatePrintSelector(testOrTask('All {Test}s'));
+    renderTotalDetails();
+}
+
+function renderTotalDetails() {
+    var stat = window.testdata.statistics().total[0];
+    var tests = window.testdata.suite().allTests().sort(sortByStatus)
+    stat.totalTime = calculateTotalTime(tests);
+    $.tmpl('tagOrTotalDetailsTemplate', stat).appendTo('#details-header');
+    drawTestDetailsTable(tests, true);
+}
+
+function updatePrintSelector(name, info) {
+    if (info)
+        name += ' (' + info + ')';
+    $('#print-selector').html(name);
+}
+
+function tagDetailSelected(name) {
+    renderTagSelector(name);
+    if (name) {
+        var tag = findTag(name);
+        if (tag) {
+            renderTagDetails(tag);
+            updatePrintSelector(name, tag.info);
+        }
+    }
+    scrollToSelector('tags', name);
+}
+
+function findTag(name) {
+    var tags = window.testdata.statistics().tag;
+    for (var i = 0, len = tags.length; i < len; i++) {
+        if (tags[i].label == name)
+            return tags[i];
+    }
+    return null;
+}
+
+function renderTagSelector(name) {
+    var args = {linkTarget: (name) ? 'tags?'+name : 'tags',
+                tagTabStatus: 'detail-tab-selected'};
+    var stats = {tags: window.testdata.statistics().tag, selected: name};
+    renderSelector(args, 'tagDetailsSelectorTemplate', stats);
+}
+
+function renderTagDetails(tag) {
+    var tests = getTestsHavingTag(tag);
+    tag.totalTime = calculateTotalTime(tests);
+    $.tmpl('tagOrTotalDetailsTemplate', tag).appendTo('#details-header');
+    drawTestDetailsTable(tests, true);
+}
+
+function suiteDetailSelected(id) {
+    renderSuiteSelector(id);
+    if (id)
+        renderSuiteDetails(id);
+    scrollToSelector('suites', id);
+}
+
+function renderSuiteSelector(id) {
+    var args = {linkTarget: (id) ? 'suites?'+id : 'suites',
+                suiteTabStatus: 'detail-tab-selected'};
+    var stats = {suites: window.testdata.statistics().suite,
+                 selected: id};
+    renderSelector(args, 'suiteDetailsSelectorTemplate', stats);
+}
+
+function renderSuiteDetails(id) {
+    window.testdata.ensureLoaded(id, function (ids) {
+        var suite = window.testdata.findLoaded(id);
+        var opts = {logURL: window.settings.logURL};
+        $.tmpl('suiteDetailsTemplate', suite, opts).appendTo('#details-header');
+        drawTestDetailsTable(suite.allTests(), false);
+        updatePrintSelector(suite.fullName);
+    });
+}
+
+function searchExecuted(suite, test, include, exclude) {
+    renderSearchSelector(suite, test, include, exclude);
+    if (suite || test || include || exclude) {
+        renderSearchDetails(suite, test, include, exclude);
+        scrollToSelector('search' +
+                         '?suite=' + encodeURIComponent(suite) +
+                         '&test=' + encodeURIComponent(test) +
+                         '&include=' + encodeURIComponent(include) +
+                         '&exclude=' + encodeURIComponent(exclude));
+    } else {
+        scrollToSelector('search');
+    }
+}
+
+function renderSearchSelector(suite, test, include, exclude) {
+    var args = {linkTarget: (suite || test || include || exclude) ?
+                            ('search?suite=' + suite + '&test=' + test + '&include=' + include + '&exclude=' + exclude) :
+                            'search',
+                searchTabStatus: 'detail-tab-selected'};
+    var search = {suite: suite, test: test, include: include, exclude: exclude};
+    renderSelector(args, 'searchSelectorTemplate', search);
+}
+
+function renderSearchDetails(suite, test, include, exclude) {
+    var tests = searchTests(util.escape(suite), util.escape(test),
+                            util.escape(include), util.escape(exclude));
+    var stats = calculateStats(tests);
+    stats.totalTime = calculateTotalTime(tests);
+    $.tmpl('tagOrTotalDetailsTemplate', stats).appendTo('#details-header');
+    drawTestDetailsTable(tests, true);
+}
+
+function searchTests(suitePattern, testPattern, includePattern, excludePattern) {
+    var tests;
+    if (suitePattern)
+        tests = window.testdata.suite().searchTestsInSuite(suitePattern);
+    else
+        tests = window.testdata.suite().allTests();
+    return util.filter(tests, function (test) {
+        if (testPattern && !test.matchesNamePattern(testPattern))
+            return false;
+        if (includePattern && !test.matchesTagPattern(includePattern))
+            return false;
+        return !(excludePattern && test.matchesTagPattern(excludePattern));
+    });
+}
+
+function scrollToSelector(base, query) {
+    $('#test-details-container').css('min-height', $(window).height());
+    var anchor = query ? base + '?' + encodeURIComponent(query) : base;
+    window.location.hash = window.prevLocationHash = anchor;
+    document.getElementById('test-details-container').scrollIntoView();
+}
+
+function renderSelector(args, template, stats) {
+    window.elementsToRender = [];
+    var container = $('#test-details-container');
+    container.empty();
+    $.tmpl('detailsHeaderTemplate', args).appendTo(container);
+    $.tmpl(template, stats).appendTo(container);
+}
+
+function drawTestDetailsTable(tests, sortByStatus) {
+    if (!tests.length)
+        return;
+    renderTestDetailsHeader();
+    window.elementsToRender = tests;
+    var target = $('#test-details').find('tbody');
+    renderTestDetails(sortByStatus, target);
+}
+
+function renderTestDetailsHeader() {
+    var header = $.tmpl('testDetailsTableTemplate');
+    hideHiddenDetailsColumns(header);
+    header.appendTo('#test-details-container');
+}
+
+function sortByStatus(t1, t2) {
+    if (t1.status == t2.status)
+        return t1.fullName < t2.fullName ? -1 : 1;
+    statuses = {'FAIL': -1, 'SKIP': 0, 'PASS': 1};
+    return statuses[t1.status] < statuses[t2.status] ? -1 : 1;
+}
+
+function getTestsHavingTag(tag) {
+    return window.testdata.suite().searchTestsByTag(tag).sort(sortByStatus);
+}
+
+function calculateTotalTime(tests) {
+    var total = 0;
+    for (var i = 0, len = tests.length; i < len; i++)
+        total += tests[i].times.elapsedMillis;
+    return util.formatElapsed(total);
+}
+
+function calculateStats(tests) {
+    var passed = util.filter(tests, function (test) {
+        return test.status == 'PASS';
+    });
+    var failed = util.filter(tests, function (test) {
+        return test.status == 'FAIL';
+    });
+    return {
+      total: tests.length,
+      pass: passed.length,
+      fail: failed.length,
+      skip: tests.length - passed.length - failed.length
+    };
+}
+
+function renderTestDetails(sortByStatus, target) {
+    if (!window.elementsToRender.length)
+        return;
+    var tests = popUpTo(window.elementsToRender, 50);
+    renderTestDetailsRows(tests, target);
+    if (window.elementsToRender.length)
+        setTimeout(function () {renderTestDetails(sortByStatus, target);}, 0);
+    else
+        configureTableSorter(sortByStatus);
+}
+
+function renderTestDetailsRows(tests, target) {
+    var rows = $.tmpl('testDetailsTableRowTemplate', tests,
+                      {logURL: window.settings.logURL});
+    rows.find('a').click(stopPropagation);
+    hideHiddenDetailsColumns(rows);
+    rows.appendTo(target);
+}
+
+function configureTableSorter(sortByStatus) {
+    var config = {headers: {3: {sorter: 'status'},
+                            5: {sortInitialOrder: 'desc'},
+                            6: {sorter: 'times'}},
+                  selectorSort: '.details-col-header'};
+    if (sortByStatus)
+        config['sortList'] = [[3, 0]];
+    $('#test-details').tablesorter(config);
+}
+
+function popUpTo(list, upTo) {
+    var result = [];
+    while (list.length > 0 && result.length < upTo)
+        result.push(list.shift());
+    return result;
+}
+
+function toggleDetailsColumn(name) {
+    var column = $('.details-col-' + name);
+    column.toggleClass('hidden');
+    var hidden = column.hasClass('hidden');
+    storage.set(name, hidden ? 'hidden' : 'visible');
+    column.find('.details-col-toggle').html(hidden ? '&hellip;' : '&times;');
+}
+
+function hideHiddenDetailsColumns(elem) {
+    var names = ['doc', 'tags', 'msg', 'elapsed', 'times'];
+    for (var i = 0; i < names.length; i++) {
+        var name = names[i];
+        if (storage.get(name, 'visible') == 'hidden') {
+            var column = elem.find('.details-col-' + name);
+            column.addClass('hidden');
+            column.find('.details-col-toggle').html('&hellip;');
+        }
+    }
+}
+</script>
+
+<script type="text/x-jquery-tmpl" id="summaryTableTemplate">
+  <h2>Summary Information</h2>
+  <table class="details">
+    <tr>
+      <th>Status:</th>
+      {{if fail}}
+      <td><a href="#totals" onclick="totalDetailSelected()"
+             class="fail">${fail} {{= testOrTask('{test}')}}{{if fail != 1}}s{{/if}} failed</a></td>
+      {{else pass && skip}}
+      <td><a href="#totals" onclick="totalDetailSelected()"
+             class="pass">${pass} {{= testOrTask('{test}')}}{{if pass != 1}}s{{/if}} passed,
+             ${skip} {{= testOrTask('{test}')}}{{if skip != 1}}s{{/if}} skipped</a></td>
+      {{else pass}}
+      <td><a href="#totals" onclick="totalDetailSelected()"
+             class="pass">All {{= testOrTask('{test}')}}s passed</a></td>
+      {{else}}
+      <td><a href="#totals" onclick="totalDetailSelected()"
+             class="skip">All {{= testOrTask('{test}')}}s skipped</a></td>
+      {{/if}}
+    </tr>
+    {{if doc()}}
+    <tr>
+      <th>Documentation:</th>
+      <td class="doc">{{html doc()}}</td>
+    </tr>
+    {{/if}}
+    {{each metadata}}
+    <tr>
+      <th>{{html $value[0]}}:</th>
+      <td class="doc">{{html $value[1]}}</td>
+    </tr>
+    {{/each}}
+    {{if times.startTime != 'N/A'}}
+    <tr>
+      <th>Start Time:</th>
+      <td>${times.startTime}</td>
+    </tr>
+    {{/if}}
+    {{if times.endTime != 'N/A'}}
+    <tr>
+      <th>End Time:</th>
+      <td>${times.endTime}</td>
+    </tr>
+    {{/if}}
+    <tr>
+      <th>Elapsed Time:</th>
+      <td>${times.elapsedTime}</td>
+    </tr>
+    {{if $item.logURL}}
+    <tr>
+      <th>Log File:</th>
+      <td><a href="${$item.logURL}">${$item.logURL}</a></td>
+    </tr>
+    {{/if}}
+  </table>
+</script>
+
+<script type="text/x-jquery-tmpl" id="totalStatisticsRowTemplate">
+  <tr onclick="totalDetailSelected('all')" class="row-${$item.index}">
+    <td class="stats-col-name">
+      <div class="stat-name">
+        <a href="#totals">{{html label}}</a>
+      </div>
+    </td>
+    {{tmpl($data) 'statColumnsTemplate'}}
+  </tr>
+</script>
+
+<script type="text/x-jquery-tmpl" id="tagStatisticsRowTemplate">
+  <tr onclick="tagDetailSelected('${label}')" class="row-${$item.index}">
+    <td class="stats-col-name" title="{{html doc}}">
+      <div class="stat-name">
+        <a href="#tags?${label}">{{html label}}</a>
+        {{if info}}(${info}){{/if}}
+      </div>
+      <div class="tag-links">
+        {{each links}}
+        <span>[<a href="{{html $value.url}}" onclick="stopPropagation(event)"
+                  title="{{html $value.url}}">{{html $value.title}}</a>]</span>
+        {{/each}}
+      </div>
+    </td>
+    {{tmpl($data) 'statColumnsTemplate'}}
+  </tr>
+</script>
+
+<script type="text/x-jquery-tmpl" id="suiteStatisticsRowTemplate">
+  <tr onclick="suiteDetailSelected('${id}')" class="row-${$item.index}">
+    <td class="stats-col-name" title="{{html label}}">
+      <div class="stat-name">
+        <a href="#suites?${id}"><span class="parent-name">{{html formatParentName}}</span>{{html name}}</a>
+      </div>
+    </td>
+    {{tmpl($data) 'statColumnsTemplate'}}
+  </tr>
+</script>
+
+<script type="text/x-jquery-tmpl" id="detailsHeaderTemplate">
+  <h2 id="${linkTarget}">{{= testOrTask('{Test} Details')}}</h2>
+  <ul id="detail-tabs">
+    <li class="${totalTabStatus} detail-tab">
+      <a href="#totals" onclick="renderTotalSelector()"
+         title="{{= testOrTask('Show all {tests}')}}">All</a>
+    </li>
+    <li class="${tagTabStatus} detail-tab">
+      <a href="#tags" onclick="renderTagSelector()"
+         title="{{= testOrTask('Show {tests} by tag')}}">Tags</a>
+    </li>
+    <li class="${suiteTabStatus} detail-tab">
+      <a href="#suites" onclick="renderSuiteSelector()"
+         title="{{= testOrTask('Show {tests} by suite')}}">Suites</a>
+    </li>
+    <li class="${searchTabStatus} detail-tab">
+      <a href="#search" onclick="renderSearchSelector()"
+         title="{{= testOrTask('Free {test} search')}}">Search</a>
+    </li>
+  </ul>
+</script>
+
+<script  type="text/x-jquery-tmpl" id="totalDetailsSelectorTemplate">
+  <table class="details" id="details-header">
+  </table>
+</script>
+
+<script  type="text/x-jquery-tmpl" id="tagDetailsSelectorTemplate">
+  <table class="details" id="details-header">
+    <tr class="selector">
+      <th>Tag:</th>
+      <td id="normal-selector">
+        <select id="tag-detail-selector" title="Tag selector"
+                onchange="tagDetailSelected(this.options[this.selectedIndex].value)">
+          <option selected disabled hidden>-- Select --</option>
+          {{each tags}}
+          <option value="${$value.label}"
+                  {{if $value.label == selected}}selected="selected"{{/if}}>
+            {{html $value.label}} {{if $value.info}}(${$value.info}){{/if}}
+          </option>
+          {{/each}}
+        </select>
+      </td>
+      <td id="print-selector"></td>
+    </tr>
+  </table>
+</script>
+
+<script  type="text/x-jquery-tmpl" id="suiteDetailsSelectorTemplate">
+  <table class="details" id="details-header">
+    <tr class="selector">
+      <th>Suite:</th>
+      <td id="normal-selector">
+        <select id="suite-detail-selector" title="Suite selector"
+                onchange="suiteDetailSelected(this.options[this.selectedIndex].value)">
+          <option selected disabled hidden>-- Select --</option>
+          {{each suites}}
+          <option value="${$value.id}"
+                  {{if $value.id == selected}}selected="selected"{{/if}}>
+            {{html $value.label}}
+          </option>
+          {{/each}}
+        </select>
+      </td>
+      <td id="print-selector"></td>
+    </tr>
+  </table>
+</script>
+
+<script  type="text/x-jquery-tmpl" id="searchSelectorTemplate">
+  <form action="javascript:void(0)">
+    <table class="details" id="details-header">
+      <tr class="selector first-selector">
+        <th><label for="search-suite">Suite:</label></th>
+        <td><input id="search-suite" type="text" value="${suite}"></td>
+      </tr>
+      <tr class="selector middle-selector">
+        <th><label for="search-test">{{= testOrTask('{Test}')}}:</label></th>
+        <td><input id="search-test" type="text" value="${test}"></td>
+      </tr>
+      <tr class="selector middle-selector">
+        <th><label for="search-include">Include:</label></th>
+        <td><input id="search-include" type="text" value="${include}"></td>
+      </tr>
+      <tr class="selector middle-selector">
+        <th><label for="search-exclude">Exclude:</label></th>
+        <td><input id="search-exclude" type="text" value="${exclude}"></td>
+      </tr>
+      <tr class="selector last-selector" id="search-buttons">
+        <th></th>
+        <td>
+          <input type="submit" value="Search"
+                 onclick="searchExecuted($('#search-suite').val(),
+                                         $('#search-test').val(),
+                                         $('#search-include').val(),
+                                         $('#search-exclude').val());
+                          return false;">
+          <input type="button" value="Clear"
+                 onclick="$('#search-suite').val('');
+                          $('#search-test').val('');
+                          $('#search-include').val('');
+                          $('#search-exclude').val('');">
+          <a href="javascript:void(0)" onclick="$('#search-help').toggle()"
+             title="Toggle search help.">Help</a>
+        </td>
+      </tr>
+      <tr id="search-help" style="display: none">
+        <th></th>
+        <td>
+          <div>
+            <h3>Search fields</h3>
+            <p>
+              {{= testOrTask('{Test}')}}s can be searched based on suite and
+              {{= testOrTask('{test}')}} names as well as based on tags. If
+              multiple search criteria are used, only
+              {{= testOrTask('{test}')}}s matching all of them are included.
+              Search fields have same semantics as
+              <em>&#8209;&#8209;suite</em>,
+              <em>&#8209;&#8209;{{= testOrTask('{test}')}}</em>,
+              <em>&#8209;&#8209;include</em> and
+              <em>&#8209;&#8209;exclude</em> command line options, respectively.
+            </p>
+            <table class="search-help-examples">
+              <col class="help-item">
+              <col class="help-explanation">
+              <col class="help-examples>
+              <tr>
+                <th>Field</th>
+                <th>Explanation</th>
+                <th>Examples</th>
+              </tr>
+              <tr>
+                <td>Suite</td>
+                <td>
+                  {{= testOrTask('{Test}')}}s in matching suites are included.
+                  The pattern can match either suite's name or its full name
+                  that contains also parent suite names.
+                </td>
+                <td>My Suite<br>Root.Parent.Sui*</td>
+              </tr>
+              <tr>
+                <td>{{= testOrTask('{Test}')}}</td>
+                <td>
+                  Matching {{= testOrTask('{test}')}}s are included. The
+                  pattern can match either {{= testOrTask('{test}')}}'s name
+                  or its full name that contains also parent suite names.
+                </td>
+                <td>Example Name<br>Root.Pa*.T???</td>
+              </tr>
+              <tr>
+                <td>Include</td>
+                <td>
+                  {{= testOrTask('{Test}')}}s that contain matching tags are
+                  included.
+                </td>
+                <td>smoke<br>bug-*</td>
+              </tr>
+              <tr>
+                <td>Exclude</td>
+                <td>
+                  {{= testOrTask('{Test}')}}s that contain matching tags are
+                  not included.
+                </td>
+                <td>slow<br>feature-4?</td>
+              </tr>
+            </table>
+            <h3>Patterns</h3>
+            <p>
+              All searches support <em>*</em> and <em>?</em> wildcards and are
+              case, space and underscore insensitive. Tag related searches also
+              support <em>AND</em>, <em>OR</em> and <em>NOT</em> (case-sensitive)
+              combining operators. If operators are used together, their
+              precedence, from highest to lowest, is <em>AND</em>, <em>OR</em>,
+              <em>NOT</em>. See <em>Simple patterns</em> and
+              <em>Tag patterns</em> sections in
+              <a href="http://robotframework.org/robotframework/#user-guide">Robot
+              Framework User Guide</a> for more details.
+            </p>
+            <table class="search-help-examples">
+              <col class="help-item">
+              <col class="help-explanation">
+              <col class="help-examples>
+              <tr>
+                <th>Pattern</th>
+                <th>Explanation</th>
+                <th>Examples</th>
+              </tr>
+              <tr>
+                <td>*</td>
+                <td>Matches anything, even an empty string.</td>
+                <td>f*<br>sprint-*</td>
+              </tr>
+              <tr>
+                <td>?</td>
+                <td>Matches any single character.</td>
+                <td>f??<br>sprint-1?</td>
+              </tr>
+              <tr>
+                <td>AND</td>
+                <td>Matches if all patterns match.</td>
+                <td>foo AND bar<br>x AND y* AND z??</td>
+              </tr>
+              <tr>
+                <td>OR</td>
+                <td>Matches if any pattern matches.</td>
+                <td>foo OR bar<br>x OR y* OR z1 AND z2</td>
+              </tr>
+              <tr>
+                <td>NOT</td>
+                <td>
+                    Matches if (optional) pattern before matches and pattern
+                    after does not.
+                </td>
+                <td>foo NOT bar<br>* NOT id-* AND smoke<br>NOT bar</td>
+              </tr>
+            </table>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </form>
+</script>
+
+<script type="text/x-jquery-tmpl" id="tagOrTotalDetailsTemplate">
+  <tr>
+    <th>Status:</th>
+    <td>{{tmpl($data) 'suiteStatusMessageTemplate'}}</td>
+  </tr>
+  {{if doc}}
+  <tr>
+    <th>Documentation:</th>
+    <td>{{html doc}}</td>
+  </tr>
+  {{/if}}
+  {{if combined}}
+  <tr>
+    <th>Pattern:</th>
+    <td>{{html combined}}</td>
+  </tr>
+  {{/if}}
+  {{if links}}{{if links.length}}
+  <tr>
+    <th>Links:</th>
+    <td>{{each links}}<a href="{{html $value.url}}"
+                         title="{{html $value.url}}">{{html $value.title}}</a> &nbsp; {{/each}}</td>
+  </tr>
+  {{/if}}{{/if}}
+  <tr>
+    <th>Total Time:</th>
+    <td>${totalTime}</td>
+  </tr>
+</script>
+
+<script type="text/x-jquery-tmpl" id="suiteDetailsTemplate">
+  <tr>
+    <th>Status:</th>
+    <td>{{tmpl($data) 'suiteStatusMessageTemplate'}}</td>
+  </tr>
+  {{if doc()}}
+  <tr>
+    <th>Documentation:</th>
+    <td class="doc">{{html doc()}}</td>
+  </tr>
+  {{/if}}
+  {{each metadata}}
+  <tr>
+    <th>{{html $value[0]}}:</th>
+    <td class="doc">{{html $value[1]}}</td>
+  </tr>
+  {{/each}}
+  {{if message()}}
+  <tr>
+    <th>Message:</th>
+    <td class="message">{{html message()}}</td>
+  </tr>
+  {{/if}}
+  <tr>
+    <th>Start / End Time:</th>
+    <td>${times.startTime} / ${times.endTime}</td>
+  </tr>
+  <tr>
+    <th>Elapsed Time:</th>
+    <td>${times.elapsedTime}</td>
+  </tr>
+  {{if $item.logURL}}
+  <tr>
+    <th>Log File:</th>
+    <td><a href="${$item.logURL}#${id}"
+           title="{{html fullName}}">${$item.logURL}#${id}</a></td>
+  </tr>
+  {{/if}}
+</script>
+
+<script type="text/x-jquery-tmpl" id="testDetailsTableTemplate">
+  <table id="test-details">
+    <thead>
+      <tr>
+        <th class="details-col-name" title="Name">
+          <div class='details-col-header'>Name</div>
+        </th>
+        <th class="details-col-doc" title="Documentation">
+          <div class='details-col-toggle' onclick="toggleDetailsColumn('doc')">&times;</div>
+          <div class='details-col-header'>Documentation</div>
+        </th>
+        <th class="details-col-tags" title="Tags">
+          <div class='details-col-toggle' onclick="toggleDetailsColumn('tags')">&times;</div>
+          <div class='details-col-header'>Tags</div>
+        </th>
+        <th class="details-col-status" title="Status">
+          <div class='details-col-header'>Status</div>
+        </th>
+        <th class="details-col-msg" title="Message">
+          <div class='details-col-toggle' onclick="toggleDetailsColumn('msg')">&times;</div>
+          <div class='details-col-header'>Message</div>
+        </th>
+        <th class="details-col-elapsed" title="Elapsed Time">
+          <div class='details-col-toggle' onclick="toggleDetailsColumn('elapsed')">&times;</div>
+          <div class='details-col-header'>Elapsed</div>
+        </th>
+        <th class="details-col-times" title="Start Time / End Time">
+          <div class='details-col-toggle' onclick="toggleDetailsColumn('times')">&times;</div>
+          <div class='details-col-header'>Start / End</div>
+        </th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</script>
+
+<script type="text/x-jquery-tmpl" id="testDetailsTableRowTemplate">
+  {{if $item.logURL}}
+  <tr onclick="location = '${$item.logURL}#${id}'" title="{{html fullName}}">
+    <td class="details-col-name">
+      <div><a href="${$item.logURL}#${id}"><span class="parent-name">{{html formatParentName}}</span>{{html name}}</a></div>
+    </td>
+  {{else}}
+  <tr title="{{html fullName}}">
+    <td class="details-col-name">
+      <div><span class="parent-name">{{html formatParentName}}</span>{{html name}}</div>
+    </td>
+  {{/if}}
+    <td class="details-col-doc"><div class="doc details-limited">{{html doc()}}</div></td>
+    <td class="details-col-tags"><div>{{html tags.join(', ')}}</div></td>
+    <td class="details-col-status"><div><span class="label ${status.toLowerCase()}">${status}</span></div></td>
+    <td class="details-col-msg"><div class="message details-limited">{{html message()}}</div></td>
+    <td class="details-col-elapsed"><div>${times.elapsedTime}</div></td>
+    <td class="details-col-times"><div>${times.startTime}<br>${times.endTime}</div></td>
+  </tr>
+</script>
+
+</body>
+</html>

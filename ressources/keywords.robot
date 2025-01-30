@@ -7,11 +7,9 @@ Resource   ./variables.robot
 
 
 *** Keywords ***
-
 !SuiteSetup
     [Arguments]    ${REMOTE_URL_APPIUM}    ${DEVICE_NAME}
     Log    Open Application ${REMOTE_URL_APPIUM} platformName=Android automationName=UiAutomator2 appPackage=${PACKAGE_NAME_KAABU_PLUS} appActivity=${ACTIVITY_NAME2} appium:udid=${DEVICE_NAME} noReset=${APP_RESET} fullReset=${APP_FULL_reset}
-
 
 !SuiteTeardown
     Close All Applications
@@ -21,11 +19,14 @@ OPEN APP IN PHONE
     Open Application   ${REMOTE_URL_APPIUM}  platformName=Android  automationName=UiAutomator2  automationName=Appium  appPackage=${PACKAGE_NAME_KAABU_PLUS}  appActivity=${ACTIVITY_NAME2}  appium:udid=${DEVICE_NAME}  noReset=${APP_RESET}  fullReset=${APP_FULL_reset}
     #Wait Until Page Contains Element    ${BUTTON_TO_CHECK}    timeout=30
 
+
+# Les fonctions pour l'application maxit OM
 Click Quitter
     Wait Until Page Contains    Quitter     timeout=10
     Click Element    ${QUITTER_BUTTON}
     Sleep    1
 
+#Achat pass maxit
 Achat pass OM
     Sleep    1
     Click Element    ${VOIR_PLUS}
@@ -44,6 +45,7 @@ Achat pass OM
     Click Element    ${ACHETER}
     sleep     5s
 
+# Achat pass international maxit
 Achat pass International OM
     Sleep    1
     Click Element    ${VOIR_PLUS}
@@ -68,6 +70,7 @@ Achat pass International OM
     Log To Console  Fin du scénario
     sleep   2
 
+#Fonction qui permet de renseigner le code avec kaabu plus
 SAISIR CODE PIN 
     Wait Until Page Contains Element    ${NINE_BUTTON}     timeout=10
     Click Element    ${NINE_BUTTON}
@@ -78,6 +81,7 @@ SAISIR CODE PIN
     Sleep    1
     Click Element    ${FOUR_BUTTON}
 
+#Fonction qui permet de faire achat de crédit
 ACHAT CREDIT 
     Wait Until Page Contains Element    ${VOIR_PLUS_BUTTON}    timeout=10
     Click Element    ${VOIR_PLUS_BUTTON}
@@ -109,7 +113,7 @@ ACHAT CREDIT
     Sleep     2
 
 
-
+#Tjs achat de crédit
 ACHAT1 CREDIT 
     Wait Until Page Contains Element    ${VOIR_PLUS_BUTTON}    timeout=10
     Click Element    ${VOIR_PLUS_BUTTON}
@@ -132,13 +136,13 @@ ACHAT1 CREDIT
     Sleep    2
 
    
-
-
+#Pour accès OM
 Acces 
     Sleep    1
     Click Element    ${OM_BUTTON}
     
 
+#Cette fonction permet d'éffectuer un transfert
 Effectuer un transfert
     Click Element    ${TRANSFERT_BUTTON}
     Sleep    1
@@ -198,7 +202,7 @@ ACHAT RAPIDO
         Click Element     ${CONFIRMER_RECHARGE_RAPIDO}
         sleep     2
 
-
+#Cette fonction permet au distributeur de faire des dépôt
 DEPOT DISTRI RAPIDO
     Wait Until Page Contains Element    ${DEPOT}    timeout=10
     Click Element    ${DEPOT}
@@ -215,13 +219,14 @@ DEPOT DISTRI RAPIDO
     Click Element      ${CONFIRMER_RECHARGE_RAPIDO} 
     Sleep   2
 
-    
+#Cette fonction permet de voir l'historique des transactions   
 HISTORIQUE DES TRANSACTIONS
     Wait Until Page Contains Element    ${HISTORIQUE_DES_TRANSACTIONS}    timeout=10
     Click Element    ${HISTORIQUE_DES_TRANSACTIONS}
     Sleep    2
 
 
+#Cette fonctiion permet de faire le paiement senelec 
 PAIEMENT SENELEC
     Wait Until Page Contains Element    ${FACTURES_BUTTON}    timeout=10
     Click Element    ${FACTURES_BUTTON}
@@ -239,6 +244,7 @@ PAIEMENT SENELEC
     Click Element    ${VALIDER_RECHARGE_RAPIDO}
     sleep     2
 
+#Cette fonction permet de tester le paiement des factures fixes sonatel
 PAIEMENT FACTURES FIXES
     Wait Until Page Contains Element    ${FACTURES_BUTTON}    timeout=10
     Click Element    ${FACTURES_BUTTON}
@@ -256,6 +262,7 @@ PAIEMENT FACTURES FIXES
     Click Element    ${VALIDER_RECHARGE_RAPIDO}
     sleep     2
 
+#Cette fonction pour tester le paiement woyafal
 PAIEMENT WOYOFAL 
     Wait Until Page Contains Element    ${FACTURES_BUTTON}    timeout=10
     Click Element    ${FACTURES_BUTTON}
@@ -358,3 +365,10 @@ DISTRI PAIEMENT SEN EAU
     sleep   2
     Click Element    ${VALIDER_RECHARGE_RAPIDO}
     sleep     2
+
+DISTRI GRILLE COMMISSION
+    Wait Until Page Contains Element     ${GRILLE_COMISSION}  timeout=10
+    Click Element       ${GRILLE_COMISSION}
+    Wait Until Page Contains   Minimum    timeout=10
+    Swipe    137  1423  137  286  3000
+    sleep   2
