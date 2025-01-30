@@ -372,3 +372,17 @@ DISTRI GRILLE COMMISSION
     Wait Until Page Contains   Minimum    timeout=10
     Swipe    137  1423  137  286  3000
     sleep   2
+DISTRI TRANSFERT NATIONAL
+    Wait Until Page Contains Element   ${TRANSFERT}    timeout=10
+    Click Element       ${TRANSFERT}
+    Wait Until Page Contains Element    ${NUMERO_RETRAIT_BUTTON}    timeout=10
+    Click Element    ${NUMERO_RETRAIT_BUTTON}
+    Input Text Into Current Element  ${NUMERO_TEL_RAPIDO}
+    sleep     1
+    Click Element    ${MONTANT_RETRAIT_BUTTON}
+    Input Text Into Current Element    1
+    sleep    2
+    Click Element    ${VALIDER_RECHARGE_RAPIDO}
+    sleep     2
+    Click Element       ${CONFIRMER_RECHARGE_RAPIDO}
+    sleep     20000

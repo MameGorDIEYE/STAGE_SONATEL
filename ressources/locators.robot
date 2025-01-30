@@ -90,3 +90,4 @@ ${NUMERO_RECHARGE}                   xpath=//android.widget.FrameLayout[@resourc
 ${MONTANT_VENTE_BUTTON}              xpath=//android.widget.FrameLayout[@resource-id="android:id/content"]/android.widget.FrameLayout/android.widget.FrameLayout/android.view.View/android.view.View/android.view.View/android.view.View[2]/android.widget.EditText[2]
 ${SEN_EAU_BUTTON}                    xpath=//android.widget.ImageView[@content-desc="Sen'eau"]
 ${GRILLE_COMISSION}                  xpath=//android.widget.ImageView[@content-desc="Grille commission"]
+${TRANSFERT}                         xpath=//android.widget.ImageView[@content-desc="Transfert"]
