@@ -17,58 +17,6 @@ Resource   ./variables.robot
 OPEN APP IN PHONE 
     [Arguments]    ${REMOTE_URL_APPIUM}    ${DEVICE_NAME}    ${BUTTON_TO_CHECK}
     Open Application   ${REMOTE_URL_APPIUM}  platformName=Android  automationName=UiAutomator2  automationName=Appium  appPackage=${PACKAGE_NAME_KAABU_PLUS}  appActivity=${ACTIVITY_NAME2}  appium:udid=${DEVICE_NAME}  noReset=${APP_RESET}  fullReset=${APP_FULL_reset}
-    #Wait Until Page Contains Element    ${BUTTON_TO_CHECK}    timeout=30
-
-
-# Les fonctions pour l'application maxit OM
-Click Quitter
-    Wait Until Page Contains    Quitter     timeout=10
-    Click Element    ${QUITTER_BUTTON}
-    Sleep    1
-
-#Achat pass maxit
-Achat pass OM
-    Sleep    1
-    Click Element    ${VOIR_PLUS}
-    Sleep    2
-    Click Element    ${ACHAT_CREDIT}
-    Wait Until Page Contains Element    ${CHAMP_DE_SAISIE_NUM}    timeout=10
-    Sleep    2
-    Click Element    ${CHAMP_DE_SAISIE_NUM}
-    Input Text Into Current Element    ${NUMERO_DE_TELEPHONE}
-    sleep    2
-    Click Element    ${ACHETER}
-    sleep    2s
-    Click Element  ${CHAMP_DE_SAISIE_BUT}
-    sleep    2s
-    Input Text Into Current Element    1
-    Click Element    ${ACHETER}
-    sleep     5s
-
-# Achat pass international maxit
-Achat pass International OM
-    Sleep    1
-    Click Element    ${VOIR_PLUS}
-    Sleep    2
-    Click Element    ${PASS_INTER}
-    Wait Until Page Contains Element    ${INPUT_PASS_INTER}    timeout=10
-    Sleep    2 
-    Click Element    ${INPUT_PASS_INTER}
-    Input Text Into Current Element    ${NUMERO_DE_TELEPHONE}
-    Sleep    2
-    Click Element    ${ACHETER}
-    sleep    2
-    Click Element    ${ALLO_MONDE}
-    sleep    2
-    Click Element    ${PASS_ALLO_MONDE}
-    sleep    2
-    Click Element    ${ACHETER}
-    sleep    2
-    Click Element     ${CREDIT_RECHARGE}
-    Log  Solde insuffisant
-    Log  Le programme est terminé
-    Log To Console  Fin du scénario
-    sleep   2
 
 #Fonction qui permet de renseigner le code avec kaabu plus
 SAISIR CODE PIN 
