@@ -4,8 +4,6 @@ Library    OperatingSystem
 Resource   ./locators.robot
 Resource   ./variables.robot
 
-
-
 *** Keywords ***
 !SuiteSetup
     [Arguments]    ${REMOTE_URL_APPIUM}    ${DEVICE_NAME}
