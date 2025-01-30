@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<robot generator="Robot 6.1.1 (Python 3.12.3 on win32)" generated="20250130 09:57:24.022" rpa="false" schemaversion="4">
-<suite id="s1" name="Kabu Plus Distri Transfert National" source="C:\Users\LENOVO\Desktop\Stage sonatel\Codes_supervision\Appium\maxit_lite\kabu_plus_distri_transfert_national.robot">
+<robot generator="Robot 6.1.1 (Python 3.12.3 on win32)" generated="20250130 15:47:30.591" rpa="false" schemaversion="4">
+<suite id="s1" name="Kabu Plus Distri Transfert International" source="C:\Users\LENOVO\Desktop\Stage sonatel\Codes_supervision\Appium\maxit_lite\kabu_plus_distri_transfert_international.robot">
 <kw name="!SuiteSetup" library="keywords" type="SETUP">
 <arg>${ROBOT_TEL_MGD}</arg>
 <arg>${DEVICE_NAME_TEST}</arg>
 <kw name="Log" library="BuiltIn">
 <arg>Open Application ${REMOTE_URL_APPIUM} platformName=Android automationName=UiAutomator2 appPackage=${PACKAGE_NAME_KAABU_PLUS} appActivity=${ACTIVITY_NAME2} appium:udid=${DEVICE_NAME} noReset=${APP_RESET} fullReset=${APP_FULL_reset}</arg>
 <doc>Logs the given message with the given level.</doc>
-<msg timestamp="20250130 09:57:24.838" level="INFO">Open Application http://127.0.0.1:4723/wd/hub platformName=Android automationName=UiAutomator2 appPackage=sn.sonatel.mobile.kaabuplus appActivity=sn.sonatel.mobile.kaabuplus.MainActivity appium:udid=R58M92F00XP noReset=true fullReset=false</msg>
-<status status="PASS" starttime="20250130 09:57:24.837" endtime="20250130 09:57:24.838"/>
+<msg timestamp="20250130 15:47:30.989" level="INFO">Open Application http://127.0.0.1:4723/wd/hub platformName=Android automationName=UiAutomator2 appPackage=sn.sonatel.mobile.kaabuplus appActivity=sn.sonatel.mobile.kaabuplus.MainActivity appium:udid=R58M92F00XP noReset=true fullReset=false</msg>
+<status status="PASS" starttime="20250130 15:47:30.989" endtime="20250130 15:47:30.989"/>
 </kw>
-<status status="PASS" starttime="20250130 09:57:24.836" endtime="20250130 09:57:24.838"/>
+<status status="PASS" starttime="20250130 15:47:30.988" endtime="20250130 15:47:30.989"/>
 </kw>
 <test id="s1-t1" name="01_kabu_plus_achat_rapido" line="11">
 <kw name="OPEN APP IN PHONE" library="keywords">
@@ -34,190 +34,608 @@ Please check https://appium.io/docs/en/2.1/cli/args/
 | remote_url          | Yes    | Appium server url |
 | alias               | no     | alias             |
 | strict_ssl          | No     | allows you to send commands to an invalid certificate host like a self-signed one. |</doc>
-<status status="PASS" starttime="20250130 09:57:24.844" endtime="20250130 09:57:37.386"/>
+<status status="PASS" starttime="20250130 15:47:30.993" endtime="20250130 15:47:41.206"/>
 </kw>
-<status status="PASS" starttime="20250130 09:57:24.843" endtime="20250130 09:57:37.386"/>
+<status status="PASS" starttime="20250130 15:47:30.992" endtime="20250130 15:47:41.206"/>
 </kw>
 <kw name="OUVRIR KAABU PLUS" library="keywords">
 <kw name="Wait Until Page Contains Element" library="AppiumLibrary">
 <arg>${NINE_BUTTON_KAABUPLUS}</arg>
 <arg>timeout=10</arg>
 <doc>Waits until element specified with `locator` appears on current page.</doc>
-<msg timestamp="20250130 09:57:39.721" level="INFO">xpath criteria: //android.view.View[@content-desc="9"]
+<msg timestamp="20250130 15:47:43.548" level="INFO">xpath criteria: //android.view.View[@content-desc="9"]
 xpath criteria: //android.view.View[@content-desc="9"]</msg>
-<status status="PASS" starttime="20250130 09:57:37.387" endtime="20250130 09:57:39.721"/>
+<status status="PASS" starttime="20250130 15:47:41.207" endtime="20250130 15:47:43.548"/>
 </kw>
 <kw name="SAISIR CODE PIN KAABUPLUS" library="keywords">
 <kw name="Sleep" library="BuiltIn">
 <arg>2</arg>
 <doc>Pauses the test executed for the given time.</doc>
-<msg timestamp="20250130 09:57:41.723" level="INFO">Slept 2 seconds</msg>
-<status status="PASS" starttime="20250130 09:57:39.722" endtime="20250130 09:57:41.723"/>
+<msg timestamp="20250130 15:47:45.549" level="INFO">Slept 2 seconds</msg>
+<status status="PASS" starttime="20250130 15:47:43.549" endtime="20250130 15:47:45.549"/>
 </kw>
 <kw name="Wait Until Page Contains Element" library="AppiumLibrary">
 <arg>${NINE_BUTTON_KAABUPLUS}</arg>
 <arg>timeout=10</arg>
 <doc>Waits until element specified with `locator` appears on current page.</doc>
-<msg timestamp="20250130 09:57:41.881" level="INFO">xpath criteria: //android.view.View[@content-desc="9"]</msg>
-<status status="PASS" starttime="20250130 09:57:41.723" endtime="20250130 09:57:41.881"/>
+<msg timestamp="20250130 15:47:45.703" level="INFO">xpath criteria: //android.view.View[@content-desc="9"]</msg>
+<status status="PASS" starttime="20250130 15:47:45.549" endtime="20250130 15:47:45.703"/>
 </kw>
 <kw name="Click Element" library="AppiumLibrary">
 <arg>${NINE_BUTTON_KAABUPLUS}</arg>
 <doc>Click element identified by `locator`.</doc>
-<msg timestamp="20250130 09:57:41.890" level="INFO">Clicking element 'xpath=//android.view.View[@content-desc="9"]'.</msg>
-<msg timestamp="20250130 09:57:42.113" level="INFO">xpath criteria: //android.view.View[@content-desc="9"]</msg>
-<status status="PASS" starttime="20250130 09:57:41.882" endtime="20250130 09:57:42.114"/>
+<msg timestamp="20250130 15:47:45.707" level="INFO">Clicking element 'xpath=//android.view.View[@content-desc="9"]'.</msg>
+<msg timestamp="20250130 15:47:45.926" level="INFO">xpath criteria: //android.view.View[@content-desc="9"]</msg>
+<status status="PASS" starttime="20250130 15:47:45.703" endtime="20250130 15:47:45.926"/>
 </kw>
 <kw name="Sleep" library="BuiltIn">
 <arg>1</arg>
 <doc>Pauses the test executed for the given time.</doc>
-<msg timestamp="20250130 09:57:43.115" level="INFO">Slept 1 second</msg>
-<status status="PASS" starttime="20250130 09:57:42.114" endtime="20250130 09:57:43.115"/>
+<msg timestamp="20250130 15:47:46.927" level="INFO">Slept 1 second</msg>
+<status status="PASS" starttime="20250130 15:47:45.926" endtime="20250130 15:47:46.927"/>
 </kw>
 <kw name="Click Element" library="AppiumLibrary">
 <arg>${NINE_BUTTON_KAABUPLUS}</arg>
 <doc>Click element identified by `locator`.</doc>
-<msg timestamp="20250130 09:57:43.126" level="INFO">Clicking element 'xpath=//android.view.View[@content-desc="9"]'.</msg>
-<msg timestamp="20250130 09:57:43.345" level="INFO">xpath criteria: //android.view.View[@content-desc="9"]</msg>
-<status status="PASS" starttime="20250130 09:57:43.115" endtime="20250130 09:57:43.345"/>
+<msg timestamp="20250130 15:47:46.932" level="INFO">Clicking element 'xpath=//android.view.View[@content-desc="9"]'.</msg>
+<msg timestamp="20250130 15:47:47.146" level="INFO">xpath criteria: //android.view.View[@content-desc="9"]</msg>
+<status status="PASS" starttime="20250130 15:47:46.927" endtime="20250130 15:47:47.146"/>
 </kw>
 <kw name="Sleep" library="BuiltIn">
 <arg>1</arg>
 <doc>Pauses the test executed for the given time.</doc>
-<msg timestamp="20250130 09:57:44.346" level="INFO">Slept 1 second</msg>
-<status status="PASS" starttime="20250130 09:57:43.346" endtime="20250130 09:57:44.346"/>
+<msg timestamp="20250130 15:47:48.147" level="INFO">Slept 1 second</msg>
+<status status="PASS" starttime="20250130 15:47:47.147" endtime="20250130 15:47:48.147"/>
 </kw>
 <kw name="Click Element" library="AppiumLibrary">
 <arg>${ZERO_BUTTON_KAABUPLUS}</arg>
 <doc>Click element identified by `locator`.</doc>
-<msg timestamp="20250130 09:57:44.354" level="INFO">Clicking element 'xpath=//android.view.View[@content-desc="0"]'.</msg>
-<msg timestamp="20250130 09:57:44.562" level="INFO">xpath criteria: //android.view.View[@content-desc="0"]</msg>
-<status status="PASS" starttime="20250130 09:57:44.346" endtime="20250130 09:57:44.562"/>
+<msg timestamp="20250130 15:47:48.153" level="INFO">Clicking element 'xpath=//android.view.View[@content-desc="0"]'.</msg>
+<msg timestamp="20250130 15:47:48.388" level="INFO">xpath criteria: //android.view.View[@content-desc="0"]</msg>
+<status status="PASS" starttime="20250130 15:47:48.147" endtime="20250130 15:47:48.388"/>
 </kw>
 <kw name="Sleep" library="BuiltIn">
 <arg>1</arg>
 <doc>Pauses the test executed for the given time.</doc>
-<msg timestamp="20250130 09:57:45.564" level="INFO">Slept 1 second</msg>
-<status status="PASS" starttime="20250130 09:57:44.563" endtime="20250130 09:57:45.564"/>
+<msg timestamp="20250130 15:47:49.388" level="INFO">Slept 1 second</msg>
+<status status="PASS" starttime="20250130 15:47:48.388" endtime="20250130 15:47:49.388"/>
 </kw>
 <kw name="Click Element" library="AppiumLibrary">
 <arg>${FOUR_BUTTON__KAABUPLUS}</arg>
 <doc>Click element identified by `locator`.</doc>
-<msg timestamp="20250130 09:57:45.571" level="INFO">Clicking element 'xpath=//android.view.View[@content-desc="4"]'.</msg>
-<msg timestamp="20250130 09:57:45.797" level="INFO">xpath criteria: //android.view.View[@content-desc="4"]</msg>
-<status status="PASS" starttime="20250130 09:57:45.565" endtime="20250130 09:57:45.797"/>
+<msg timestamp="20250130 15:47:49.396" level="INFO">Clicking element 'xpath=//android.view.View[@content-desc="4"]'.</msg>
+<msg timestamp="20250130 15:47:49.597" level="INFO">xpath criteria: //android.view.View[@content-desc="4"]</msg>
+<status status="PASS" starttime="20250130 15:47:49.388" endtime="20250130 15:47:49.598"/>
 </kw>
 <kw name="Sleep" library="BuiltIn">
 <arg>2</arg>
 <doc>Pauses the test executed for the given time.</doc>
-<msg timestamp="20250130 09:57:47.798" level="INFO">Slept 2 seconds</msg>
-<status status="PASS" starttime="20250130 09:57:45.798" endtime="20250130 09:57:47.798"/>
+<msg timestamp="20250130 15:47:51.599" level="INFO">Slept 2 seconds</msg>
+<status status="PASS" starttime="20250130 15:47:49.598" endtime="20250130 15:47:51.599"/>
 </kw>
-<status status="PASS" starttime="20250130 09:57:39.722" endtime="20250130 09:57:47.798"/>
+<status status="PASS" starttime="20250130 15:47:43.548" endtime="20250130 15:47:51.599"/>
 </kw>
 <kw name="Sleep" library="BuiltIn">
 <arg>3s</arg>
 <doc>Pauses the test executed for the given time.</doc>
-<msg timestamp="20250130 09:57:50.799" level="INFO">Slept 3 seconds</msg>
-<status status="PASS" starttime="20250130 09:57:47.798" endtime="20250130 09:57:50.799"/>
+<msg timestamp="20250130 15:47:54.599" level="INFO">Slept 3 seconds</msg>
+<status status="PASS" starttime="20250130 15:47:51.599" endtime="20250130 15:47:54.599"/>
 </kw>
-<status status="PASS" starttime="20250130 09:57:37.387" endtime="20250130 09:57:50.799"/>
+<status status="PASS" starttime="20250130 15:47:41.206" endtime="20250130 15:47:54.599"/>
 </kw>
-<kw name="DISTRI TRANSFERT NATIONAL" library="keywords">
+<kw name="DISTRI TRANSFERT INTERNATIONAL" library="keywords">
 <kw name="Wait Until Page Contains Element" library="AppiumLibrary">
 <arg>${TRANSFERT}</arg>
 <arg>timeout=10</arg>
 <doc>Waits until element specified with `locator` appears on current page.</doc>
-<msg timestamp="20250130 09:57:50.963" level="INFO">xpath criteria: //android.widget.ImageView[@content-desc="Transfert"]</msg>
-<status status="PASS" starttime="20250130 09:57:50.800" endtime="20250130 09:57:50.964"/>
+<msg timestamp="20250130 15:47:54.749" level="INFO">xpath criteria: //android.widget.ImageView[@content-desc="Transfert"]</msg>
+<status status="PASS" starttime="20250130 15:47:54.601" endtime="20250130 15:47:54.749"/>
 </kw>
 <kw name="Click Element" library="AppiumLibrary">
 <arg>${TRANSFERT}</arg>
 <doc>Click element identified by `locator`.</doc>
-<msg timestamp="20250130 09:57:50.970" level="INFO">Clicking element 'xpath=//android.widget.ImageView[@content-desc="Transfert"]'.</msg>
-<msg timestamp="20250130 09:57:51.156" level="INFO">xpath criteria: //android.widget.ImageView[@content-desc="Transfert"]</msg>
-<status status="PASS" starttime="20250130 09:57:50.964" endtime="20250130 09:57:51.156"/>
+<msg timestamp="20250130 15:47:54.754" level="INFO">Clicking element 'xpath=//android.widget.ImageView[@content-desc="Transfert"]'.</msg>
+<msg timestamp="20250130 15:47:54.909" level="INFO">xpath criteria: //android.widget.ImageView[@content-desc="Transfert"]</msg>
+<status status="PASS" starttime="20250130 15:47:54.749" endtime="20250130 15:47:54.910"/>
 </kw>
 <kw name="Wait Until Page Contains Element" library="AppiumLibrary">
-<arg>${NUMERO_RETRAIT_BUTTON}</arg>
+<arg>${INTERNATIONAL_BOX_BUTTON}</arg>
 <arg>timeout=10</arg>
 <doc>Waits until element specified with `locator` appears on current page.</doc>
-<msg timestamp="20250130 09:57:51.842" level="INFO">xpath criteria: //android.widget.FrameLayout[@resource-id="android:id/content"]/android.widget.FrameLayout/android.widget.FrameLayout/android.view.View/android.view.View/android.view.View/android.view.View[2]/android.widget.EditText[1]
-xpath criteria: //android.widget.FrameLayout[@resource-id="android:id/content"]/android.widget.FrameLayout/android.widget.FrameLayout/android.view.View/android.view.View/android.view.View/android.view.View[2]/android.widget.EditText[1]</msg>
-<status status="PASS" starttime="20250130 09:57:51.156" endtime="20250130 09:57:51.842"/>
+<msg timestamp="20250130 15:47:55.585" level="INFO">xpath criteria: //android.widget.RadioButton[@content-desc="International"]
+xpath criteria: //android.widget.RadioButton[@content-desc="International"]</msg>
+<status status="PASS" starttime="20250130 15:47:54.910" endtime="20250130 15:47:55.586"/>
 </kw>
 <kw name="Click Element" library="AppiumLibrary">
-<arg>${NUMERO_RETRAIT_BUTTON}</arg>
+<arg>${INTERNATIONAL_BOX_BUTTON}</arg>
 <doc>Click element identified by `locator`.</doc>
-<msg timestamp="20250130 09:57:51.855" level="INFO">Clicking element 'xpath=//android.widget.FrameLayout[@resource-id="android:id/content"]/android.widget.FrameLayout/android.widget.FrameLayout/android.view.View/android.view.View/android.view.View/android.view.View[2]/android.widget.EditText[1]'.</msg>
-<msg timestamp="20250130 09:57:52.024" level="INFO">xpath criteria: //android.widget.FrameLayout[@resource-id="android:id/content"]/android.widget.FrameLayout/android.widget.FrameLayout/android.view.View/android.view.View/android.view.View/android.view.View[2]/android.widget.EditText[1]</msg>
-<status status="PASS" starttime="20250130 09:57:51.843" endtime="20250130 09:57:52.024"/>
+<msg timestamp="20250130 15:47:55.589" level="INFO">Clicking element 'xpath=//android.widget.RadioButton[@content-desc="International"]'.</msg>
+<msg timestamp="20250130 15:47:55.709" level="INFO">xpath criteria: //android.widget.RadioButton[@content-desc="International"]</msg>
+<status status="PASS" starttime="20250130 15:47:55.586" endtime="20250130 15:47:55.709"/>
 </kw>
-<kw name="Input Text Into Current Element" library="AppiumLibrary">
-<arg>${NUMERO_TEL_RAPIDO}</arg>
-<doc>Types the given `text` into currently selected text field.</doc>
-<msg timestamp="20250130 09:57:52.032" level="INFO">Typing text '785256742' into current text field</msg>
-<status status="PASS" starttime="20250130 09:57:52.024" endtime="20250130 09:57:53.160"/>
+<kw name="Wait Until Page Contains Element" library="AppiumLibrary">
+<arg>${PAYS_SELETED}</arg>
+<arg>timeout=10</arg>
+<doc>Waits until element specified with `locator` appears on current page.</doc>
+<msg timestamp="20250130 15:47:56.357" level="INFO">xpath criteria: //android.view.View[@content-desc="Pays"]</msg>
+<status status="PASS" starttime="20250130 15:47:55.710" endtime="20250130 15:47:56.357"/>
+</kw>
+<kw name="Click Element" library="AppiumLibrary">
+<arg>${PAYS_SELETED}</arg>
+<doc>Click element identified by `locator`.</doc>
+<msg timestamp="20250130 15:47:56.362" level="INFO">Clicking element 'xpath=//android.view.View[@content-desc="Pays"]'.</msg>
+<msg timestamp="20250130 15:47:56.489" level="INFO">xpath criteria: //android.view.View[@content-desc="Pays"]</msg>
+<status status="PASS" starttime="20250130 15:47:56.357" endtime="20250130 15:47:56.489"/>
+</kw>
+<kw name="Wait Until Page Contains Element" library="AppiumLibrary">
+<arg>${INDICATIF}</arg>
+<arg>timeout=10</arg>
+<doc>Waits until element specified with `locator` appears on current page.</doc>
+<msg timestamp="20250130 15:47:56.584" level="INFO">xpath criteria: //android.view.View[contains(@content-desc, "Mali")]</msg>
+<status status="PASS" starttime="20250130 15:47:56.490" endtime="20250130 15:47:56.585"/>
+</kw>
+<kw name="Click Element" library="AppiumLibrary">
+<arg>${INDICATIF}</arg>
+<doc>Click element identified by `locator`.</doc>
+<msg timestamp="20250130 15:47:56.590" level="INFO">Clicking element 'xpath=//android.view.View[contains(@content-desc, "Mali")]'.</msg>
+<msg timestamp="20250130 15:47:58.163" level="INFO">xpath criteria: //android.view.View[contains(@content-desc, "Mali")]</msg>
+<status status="PASS" starttime="20250130 15:47:56.585" endtime="20250130 15:47:58.163"/>
 </kw>
 <kw name="Sleep" library="BuiltIn">
 <arg>1</arg>
 <doc>Pauses the test executed for the given time.</doc>
-<msg timestamp="20250130 09:57:54.161" level="INFO">Slept 1 second</msg>
-<status status="PASS" starttime="20250130 09:57:53.161" endtime="20250130 09:57:54.162"/>
+<msg timestamp="20250130 15:47:59.163" level="INFO">Slept 1 second</msg>
+<status status="PASS" starttime="20250130 15:47:58.163" endtime="20250130 15:47:59.163"/>
+</kw>
+<kw name="Click Element" library="AppiumLibrary">
+<arg>${TEL_TRANSFERT_BUTTON}</arg>
+<doc>Click element identified by `locator`.</doc>
+<msg timestamp="20250130 15:47:59.172" level="INFO">Clicking element 'xpath=//android.widget.ScrollView/android.widget.EditText[1]'.</msg>
+<msg timestamp="20250130 15:47:59.377" level="INFO">xpath criteria: //android.widget.ScrollView/android.widget.EditText[1]</msg>
+<status status="PASS" starttime="20250130 15:47:59.163" endtime="20250130 15:47:59.377"/>
+</kw>
+<kw name="Input Text Into Current Element" library="AppiumLibrary">
+<arg>${TEL_TRANSFERT_MALI}</arg>
+<doc>Types the given `text` into currently selected text field.</doc>
+<msg timestamp="20250130 15:47:59.382" level="INFO">Typing text '223 5 39 55 09 56' into current text field</msg>
+<status status="PASS" starttime="20250130 15:47:59.377" endtime="20250130 15:48:00.525"/>
 </kw>
 <kw name="Click Element" library="AppiumLibrary">
 <arg>${MONTANT_RETRAIT_BUTTON}</arg>
 <doc>Click element identified by `locator`.</doc>
-<msg timestamp="20250130 09:57:54.169" level="INFO">Clicking element 'xpath=//android.widget.ScrollView/android.widget.EditText[2]'.</msg>
-<msg timestamp="20250130 09:57:54.373" level="INFO">xpath criteria: //android.widget.ScrollView/android.widget.EditText[2]</msg>
-<status status="PASS" starttime="20250130 09:57:54.163" endtime="20250130 09:57:54.373"/>
-</kw>
-<kw name="Input Text Into Current Element" library="AppiumLibrary">
-<arg>1</arg>
-<doc>Types the given `text` into currently selected text field.</doc>
-<msg timestamp="20250130 09:57:54.380" level="INFO">Typing text '1' into current text field</msg>
-<status status="PASS" starttime="20250130 09:57:54.374" endtime="20250130 09:57:55.291"/>
+<msg timestamp="20250130 15:48:00.529" level="INFO">Clicking element 'xpath=//android.widget.ScrollView/android.widget.EditText[2]'.</msg>
+<msg timestamp="20250130 15:48:01.261" level="INFO">xpath criteria: //android.widget.ScrollView/android.widget.EditText[2]</msg>
+<status status="PASS" starttime="20250130 15:48:00.525" endtime="20250130 15:48:01.261"/>
 </kw>
 <kw name="Sleep" library="BuiltIn">
-<arg>2</arg>
+<arg>1</arg>
 <doc>Pauses the test executed for the given time.</doc>
-<msg timestamp="20250130 09:57:57.293" level="INFO">Slept 2 seconds</msg>
-<status status="PASS" starttime="20250130 09:57:55.292" endtime="20250130 09:57:57.293"/>
+<msg timestamp="20250130 15:48:02.261" level="INFO">Slept 1 second</msg>
+<status status="PASS" starttime="20250130 15:48:01.261" endtime="20250130 15:48:02.262"/>
+</kw>
+<kw name="Click Element" library="AppiumLibrary">
+<arg>${PRENOM_TRANSFERT_BENEFICIAIRE}</arg>
+<doc>Click element identified by `locator`.</doc>
+<msg timestamp="20250130 15:48:02.269" level="INFO">Clicking element 'xpath=//android.widget.ScrollView/android.widget.EditText[2]'.</msg>
+<msg timestamp="20250130 15:48:03.024" level="INFO">xpath criteria: //android.widget.ScrollView/android.widget.EditText[2]</msg>
+<status status="PASS" starttime="20250130 15:48:02.262" endtime="20250130 15:48:03.024"/>
+</kw>
+<kw name="Input Text Into Current Element" library="AppiumLibrary">
+<arg>Test_Prenom</arg>
+<doc>Types the given `text` into currently selected text field.</doc>
+<msg timestamp="20250130 15:48:03.029" level="INFO">Typing text 'Test_Prenom' into current text field</msg>
+<status status="PASS" starttime="20250130 15:48:03.024" endtime="20250130 15:48:03.207"/>
+</kw>
+<kw name="Swipe" library="AppiumLibrary">
+<arg>220</arg>
+<arg>680</arg>
+<arg>220</arg>
+<arg>587</arg>
+<arg>1000</arg>
+<doc>Swipe from one point to another point, for an optional duration.</doc>
+<status status="PASS" starttime="20250130 15:48:03.207" endtime="20250130 15:48:04.552"/>
+</kw>
+<kw name="Click Element" library="AppiumLibrary">
+<arg>${NOM_TRANSFERT_BENEFICIAIRE}</arg>
+<doc>Click element identified by `locator`.</doc>
+<msg timestamp="20250130 15:48:04.556" level="INFO">Clicking element 'xpath=//android.widget.ScrollView/android.widget.EditText[3]'.</msg>
+<msg timestamp="20250130 15:48:05.878" level="INFO">xpath criteria: //android.widget.ScrollView/android.widget.EditText[3]</msg>
+<status status="PASS" starttime="20250130 15:48:04.552" endtime="20250130 15:48:05.878"/>
+</kw>
+<kw name="Input Text Into Current Element" library="AppiumLibrary">
+<arg>Test_Nom</arg>
+<doc>Types the given `text` into currently selected text field.</doc>
+<msg timestamp="20250130 15:48:05.886" level="INFO">Typing text 'Test_Nom' into current text field</msg>
+<status status="PASS" starttime="20250130 15:48:05.878" endtime="20250130 15:48:06.086"/>
+</kw>
+<for flavor="IN RANGE">
+<var>${i}</var>
+<value>8</value>
+<iter>
+<var name="${i}">0</var>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<var>${exists}</var>
+<arg>Page Should Contain</arg>
+<arg>Choisir</arg>
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<kw name="Page Should Contain">
+<arg>Choisir</arg>
+<msg timestamp="20250130 15:48:06.091" level="FAIL">No keyword with name 'Page Should Contain' found. Did you mean:
+    AppiumLibrary.Page Should Contain Text
+    BuiltIn.Should Contain</msg>
+<status status="FAIL" starttime="20250130 15:48:06.091" endtime="20250130 15:48:06.091"/>
+</kw>
+<msg timestamp="20250130 15:48:06.091" level="INFO">${exists} = False</msg>
+<status status="PASS" starttime="20250130 15:48:06.087" endtime="20250130 15:48:06.091"/>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<arg>${exists}</arg>
+<arg>RETURN</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" starttime="20250130 15:48:06.091" endtime="20250130 15:48:06.092"/>
+</kw>
+<kw name="Swipe" library="AppiumLibrary">
+<arg>188</arg>
+<arg>679</arg>
+<arg>188</arg>
+<arg>575</arg>
+<arg>500</arg>
+<doc>Swipe from one point to another point, for an optional duration.</doc>
+<status status="PASS" starttime="20250130 15:48:06.092" endtime="20250130 15:48:06.914"/>
+</kw>
+<status status="PASS" starttime="20250130 15:48:06.087" endtime="20250130 15:48:06.914"/>
+</iter>
+<iter>
+<var name="${i}">1</var>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<var>${exists}</var>
+<arg>Page Should Contain</arg>
+<arg>Choisir</arg>
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<kw name="Page Should Contain">
+<arg>Choisir</arg>
+<msg timestamp="20250130 15:48:06.919" level="FAIL">No keyword with name 'Page Should Contain' found. Did you mean:
+    AppiumLibrary.Page Should Contain Text
+    BuiltIn.Should Contain</msg>
+<status status="FAIL" starttime="20250130 15:48:06.919" endtime="20250130 15:48:06.919"/>
+</kw>
+<msg timestamp="20250130 15:48:06.919" level="INFO">${exists} = False</msg>
+<status status="PASS" starttime="20250130 15:48:06.915" endtime="20250130 15:48:06.919"/>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<arg>${exists}</arg>
+<arg>RETURN</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" starttime="20250130 15:48:06.919" endtime="20250130 15:48:06.919"/>
+</kw>
+<kw name="Swipe" library="AppiumLibrary">
+<arg>188</arg>
+<arg>679</arg>
+<arg>188</arg>
+<arg>575</arg>
+<arg>500</arg>
+<doc>Swipe from one point to another point, for an optional duration.</doc>
+<status status="PASS" starttime="20250130 15:48:06.919" endtime="20250130 15:48:07.734"/>
+</kw>
+<status status="PASS" starttime="20250130 15:48:06.915" endtime="20250130 15:48:07.734"/>
+</iter>
+<iter>
+<var name="${i}">2</var>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<var>${exists}</var>
+<arg>Page Should Contain</arg>
+<arg>Choisir</arg>
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<kw name="Page Should Contain">
+<arg>Choisir</arg>
+<msg timestamp="20250130 15:48:07.739" level="FAIL">No keyword with name 'Page Should Contain' found. Did you mean:
+    AppiumLibrary.Page Should Contain Text
+    BuiltIn.Should Contain</msg>
+<status status="FAIL" starttime="20250130 15:48:07.739" endtime="20250130 15:48:07.739"/>
+</kw>
+<msg timestamp="20250130 15:48:07.739" level="INFO">${exists} = False</msg>
+<status status="PASS" starttime="20250130 15:48:07.735" endtime="20250130 15:48:07.739"/>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<arg>${exists}</arg>
+<arg>RETURN</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" starttime="20250130 15:48:07.739" endtime="20250130 15:48:07.740"/>
+</kw>
+<kw name="Swipe" library="AppiumLibrary">
+<arg>188</arg>
+<arg>679</arg>
+<arg>188</arg>
+<arg>575</arg>
+<arg>500</arg>
+<doc>Swipe from one point to another point, for an optional duration.</doc>
+<status status="PASS" starttime="20250130 15:48:07.740" endtime="20250130 15:48:08.550"/>
+</kw>
+<status status="PASS" starttime="20250130 15:48:07.735" endtime="20250130 15:48:08.550"/>
+</iter>
+<iter>
+<var name="${i}">3</var>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<var>${exists}</var>
+<arg>Page Should Contain</arg>
+<arg>Choisir</arg>
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<kw name="Page Should Contain">
+<arg>Choisir</arg>
+<msg timestamp="20250130 15:48:08.554" level="FAIL">No keyword with name 'Page Should Contain' found. Did you mean:
+    AppiumLibrary.Page Should Contain Text
+    BuiltIn.Should Contain</msg>
+<status status="FAIL" starttime="20250130 15:48:08.554" endtime="20250130 15:48:08.554"/>
+</kw>
+<msg timestamp="20250130 15:48:08.555" level="INFO">${exists} = False</msg>
+<status status="PASS" starttime="20250130 15:48:08.550" endtime="20250130 15:48:08.555"/>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<arg>${exists}</arg>
+<arg>RETURN</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" starttime="20250130 15:48:08.555" endtime="20250130 15:48:08.555"/>
+</kw>
+<kw name="Swipe" library="AppiumLibrary">
+<arg>188</arg>
+<arg>679</arg>
+<arg>188</arg>
+<arg>575</arg>
+<arg>500</arg>
+<doc>Swipe from one point to another point, for an optional duration.</doc>
+<status status="PASS" starttime="20250130 15:48:08.555" endtime="20250130 15:48:09.370"/>
+</kw>
+<status status="PASS" starttime="20250130 15:48:08.550" endtime="20250130 15:48:09.371"/>
+</iter>
+<iter>
+<var name="${i}">4</var>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<var>${exists}</var>
+<arg>Page Should Contain</arg>
+<arg>Choisir</arg>
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<kw name="Page Should Contain">
+<arg>Choisir</arg>
+<msg timestamp="20250130 15:48:09.377" level="FAIL">No keyword with name 'Page Should Contain' found. Did you mean:
+    AppiumLibrary.Page Should Contain Text
+    BuiltIn.Should Contain</msg>
+<status status="FAIL" starttime="20250130 15:48:09.377" endtime="20250130 15:48:09.377"/>
+</kw>
+<msg timestamp="20250130 15:48:09.378" level="INFO">${exists} = False</msg>
+<status status="PASS" starttime="20250130 15:48:09.371" endtime="20250130 15:48:09.378"/>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<arg>${exists}</arg>
+<arg>RETURN</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" starttime="20250130 15:48:09.378" endtime="20250130 15:48:09.378"/>
+</kw>
+<kw name="Swipe" library="AppiumLibrary">
+<arg>188</arg>
+<arg>679</arg>
+<arg>188</arg>
+<arg>575</arg>
+<arg>500</arg>
+<doc>Swipe from one point to another point, for an optional duration.</doc>
+<status status="PASS" starttime="20250130 15:48:09.378" endtime="20250130 15:48:10.199"/>
+</kw>
+<status status="PASS" starttime="20250130 15:48:09.371" endtime="20250130 15:48:10.199"/>
+</iter>
+<iter>
+<var name="${i}">5</var>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<var>${exists}</var>
+<arg>Page Should Contain</arg>
+<arg>Choisir</arg>
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<kw name="Page Should Contain">
+<arg>Choisir</arg>
+<msg timestamp="20250130 15:48:10.204" level="FAIL">No keyword with name 'Page Should Contain' found. Did you mean:
+    AppiumLibrary.Page Should Contain Text
+    BuiltIn.Should Contain</msg>
+<status status="FAIL" starttime="20250130 15:48:10.204" endtime="20250130 15:48:10.204"/>
+</kw>
+<msg timestamp="20250130 15:48:10.204" level="INFO">${exists} = False</msg>
+<status status="PASS" starttime="20250130 15:48:10.199" endtime="20250130 15:48:10.204"/>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<arg>${exists}</arg>
+<arg>RETURN</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" starttime="20250130 15:48:10.204" endtime="20250130 15:48:10.204"/>
+</kw>
+<kw name="Swipe" library="AppiumLibrary">
+<arg>188</arg>
+<arg>679</arg>
+<arg>188</arg>
+<arg>575</arg>
+<arg>500</arg>
+<doc>Swipe from one point to another point, for an optional duration.</doc>
+<status status="PASS" starttime="20250130 15:48:10.205" endtime="20250130 15:48:11.018"/>
+</kw>
+<status status="PASS" starttime="20250130 15:48:10.199" endtime="20250130 15:48:11.018"/>
+</iter>
+<iter>
+<var name="${i}">6</var>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<var>${exists}</var>
+<arg>Page Should Contain</arg>
+<arg>Choisir</arg>
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<kw name="Page Should Contain">
+<arg>Choisir</arg>
+<msg timestamp="20250130 15:48:11.022" level="FAIL">No keyword with name 'Page Should Contain' found. Did you mean:
+    AppiumLibrary.Page Should Contain Text
+    BuiltIn.Should Contain</msg>
+<status status="FAIL" starttime="20250130 15:48:11.022" endtime="20250130 15:48:11.023"/>
+</kw>
+<msg timestamp="20250130 15:48:11.023" level="INFO">${exists} = False</msg>
+<status status="PASS" starttime="20250130 15:48:11.018" endtime="20250130 15:48:11.023"/>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<arg>${exists}</arg>
+<arg>RETURN</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" starttime="20250130 15:48:11.023" endtime="20250130 15:48:11.023"/>
+</kw>
+<kw name="Swipe" library="AppiumLibrary">
+<arg>188</arg>
+<arg>679</arg>
+<arg>188</arg>
+<arg>575</arg>
+<arg>500</arg>
+<doc>Swipe from one point to another point, for an optional duration.</doc>
+<status status="PASS" starttime="20250130 15:48:11.023" endtime="20250130 15:48:11.845"/>
+</kw>
+<status status="PASS" starttime="20250130 15:48:11.018" endtime="20250130 15:48:11.845"/>
+</iter>
+<iter>
+<var name="${i}">7</var>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<var>${exists}</var>
+<arg>Page Should Contain</arg>
+<arg>Choisir</arg>
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<kw name="Page Should Contain">
+<arg>Choisir</arg>
+<msg timestamp="20250130 15:48:11.850" level="FAIL">No keyword with name 'Page Should Contain' found. Did you mean:
+    AppiumLibrary.Page Should Contain Text
+    BuiltIn.Should Contain</msg>
+<status status="FAIL" starttime="20250130 15:48:11.850" endtime="20250130 15:48:11.850"/>
+</kw>
+<msg timestamp="20250130 15:48:11.850" level="INFO">${exists} = False</msg>
+<status status="PASS" starttime="20250130 15:48:11.846" endtime="20250130 15:48:11.850"/>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<arg>${exists}</arg>
+<arg>RETURN</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" starttime="20250130 15:48:11.850" endtime="20250130 15:48:11.850"/>
+</kw>
+<kw name="Swipe" library="AppiumLibrary">
+<arg>188</arg>
+<arg>679</arg>
+<arg>188</arg>
+<arg>575</arg>
+<arg>500</arg>
+<doc>Swipe from one point to another point, for an optional duration.</doc>
+<status status="PASS" starttime="20250130 15:48:11.850" endtime="20250130 15:48:12.662"/>
+</kw>
+<status status="PASS" starttime="20250130 15:48:11.846" endtime="20250130 15:48:12.662"/>
+</iter>
+<status status="PASS" starttime="20250130 15:48:06.086" endtime="20250130 15:48:12.662"/>
+</for>
+<kw name="Click Element" library="AppiumLibrary">
+<arg>xpath=//android.widget.ScrollView/android.widget.EditText[1]</arg>
+<doc>Click element identified by `locator`.</doc>
+<msg timestamp="20250130 15:48:12.667" level="INFO">Clicking element 'xpath=//android.widget.ScrollView/android.widget.EditText[1]'.</msg>
+<msg timestamp="20250130 15:48:14.424" level="INFO">xpath criteria: //android.widget.ScrollView/android.widget.EditText[1]</msg>
+<status status="PASS" starttime="20250130 15:48:12.663" endtime="20250130 15:48:14.425"/>
+</kw>
+<kw name="Input Text Into Current Element" library="AppiumLibrary">
+<arg>77 453 76 56</arg>
+<doc>Types the given `text` into currently selected text field.</doc>
+<msg timestamp="20250130 15:48:14.429" level="INFO">Typing text '77 453 76 56' into current text field</msg>
+<status status="PASS" starttime="20250130 15:48:14.425" endtime="20250130 15:48:14.612"/>
+</kw>
+<kw name="Click Element" library="AppiumLibrary">
+<arg>xpath=//android.widget.ScrollView/android.widget.EditText[2]</arg>
+<doc>Click element identified by `locator`.</doc>
+<msg timestamp="20250130 15:48:14.619" level="INFO">Clicking element 'xpath=//android.widget.ScrollView/android.widget.EditText[2]'.</msg>
+<msg timestamp="20250130 15:48:15.299" level="INFO">xpath criteria: //android.widget.ScrollView/android.widget.EditText[2]</msg>
+<status status="PASS" starttime="20250130 15:48:14.612" endtime="20250130 15:48:15.299"/>
+</kw>
+<kw name="Input Text Into Current Element" library="AppiumLibrary">
+<arg>10</arg>
+<doc>Types the given `text` into currently selected text field.</doc>
+<msg timestamp="20250130 15:48:15.305" level="INFO">Typing text '10' into current text field</msg>
+<status status="PASS" starttime="20250130 15:48:15.299" endtime="20250130 15:48:16.233"/>
+</kw>
+<kw name="Click Element" library="AppiumLibrary">
+<arg>xpath=//android.view.View[@content-desc="Choisir"]</arg>
+<doc>Click element identified by `locator`.</doc>
+<msg timestamp="20250130 15:48:16.237" level="INFO">Clicking element 'xpath=//android.view.View[@content-desc="Choisir"]'.</msg>
+<msg timestamp="20250130 15:48:17.037" level="INFO">xpath criteria: //android.view.View[@content-desc="Choisir"]</msg>
+<status status="PASS" starttime="20250130 15:48:16.233" endtime="20250130 15:48:17.037"/>
+</kw>
+<kw name="Click Element" library="AppiumLibrary">
+<arg>xpath=//android.view.View[@content-desc="SCHOOL"]</arg>
+<doc>Click element identified by `locator`.</doc>
+<msg timestamp="20250130 15:48:17.044" level="INFO">Clicking element 'xpath=//android.view.View[@content-desc="SCHOOL"]'.</msg>
+<msg timestamp="20250130 15:48:18.096" level="INFO">xpath criteria: //android.view.View[@content-desc="SCHOOL"]</msg>
+<status status="PASS" starttime="20250130 15:48:17.037" endtime="20250130 15:48:18.096"/>
 </kw>
 <kw name="Click Element" library="AppiumLibrary">
 <arg>${VALIDER_RECHARGE_RAPIDO}</arg>
 <doc>Click element identified by `locator`.</doc>
-<msg timestamp="20250130 09:57:57.303" level="INFO">Clicking element 'xpath=//android.widget.Button[@content-desc="Valider"]'.</msg>
-<msg timestamp="20250130 09:57:57.522" level="INFO">xpath criteria: //android.widget.Button[@content-desc="Valider"]</msg>
-<status status="PASS" starttime="20250130 09:57:57.293" endtime="20250130 09:57:57.522"/>
+<msg timestamp="20250130 15:48:18.102" level="INFO">Clicking element 'xpath=//android.widget.Button[@content-desc="Valider"]'.</msg>
+<msg timestamp="20250130 15:48:20.132" level="INFO">xpath criteria: //android.widget.Button[@content-desc="Valider"]</msg>
+<status status="PASS" starttime="20250130 15:48:18.096" endtime="20250130 15:48:20.132"/>
+</kw>
+<kw name="Click Element" library="AppiumLibrary">
+<arg>${TEL_TRANSFERT_BUTTON}</arg>
+<doc>Click element identified by `locator`.</doc>
+<msg timestamp="20250130 15:48:20.137" level="INFO">Clicking element 'xpath=//android.widget.ScrollView/android.widget.EditText[1]'.</msg>
+<msg timestamp="20250130 15:48:20.344" level="INFO">xpath criteria: //android.widget.ScrollView/android.widget.EditText[1]</msg>
+<status status="PASS" starttime="20250130 15:48:20.132" endtime="20250130 15:48:20.344"/>
 </kw>
 <kw name="Sleep" library="BuiltIn">
 <arg>2</arg>
 <doc>Pauses the test executed for the given time.</doc>
-<msg timestamp="20250130 09:57:59.523" level="INFO">Slept 2 seconds</msg>
-<status status="PASS" starttime="20250130 09:57:57.523" endtime="20250130 09:57:59.523"/>
+<msg timestamp="20250130 15:48:22.344" level="INFO">Slept 2 seconds</msg>
+<status status="PASS" starttime="20250130 15:48:20.344" endtime="20250130 15:48:22.344"/>
 </kw>
 <kw name="Click Element" library="AppiumLibrary">
-<arg>${CONFIRMER_RECHARGE_RAPIDO}</arg>
+<arg>xpath=//android.widget.Button[@content-desc="Valider"]</arg>
 <doc>Click element identified by `locator`.</doc>
-<msg timestamp="20250130 09:57:59.534" level="INFO">Clicking element 'xpath=//android.widget.Button[@content-desc="Confirmer"]'.</msg>
-<msg timestamp="20250130 09:58:00.249" level="INFO">xpath criteria: //android.widget.Button[@content-desc="Confirmer"]</msg>
-<status status="PASS" starttime="20250130 09:57:59.523" endtime="20250130 09:58:00.249"/>
+<msg timestamp="20250130 15:48:22.353" level="INFO">Clicking element 'xpath=//android.widget.Button[@content-desc="Valider"]'.</msg>
+<msg timestamp="20250130 15:48:23.353" level="INFO">xpath criteria: //android.widget.Button[@content-desc="Valider"]</msg>
+<status status="PASS" starttime="20250130 15:48:22.344" endtime="20250130 15:48:23.354"/>
 </kw>
 <kw name="Sleep" library="BuiltIn">
-<arg>20000</arg>
+<arg>2</arg>
 <doc>Pauses the test executed for the given time.</doc>
-<status status="FAIL" starttime="20250130 09:58:00.250" endtime="20250130 09:58:20.693"/>
+<msg timestamp="20250130 15:48:25.354" level="INFO">Slept 2 seconds</msg>
+<status status="PASS" starttime="20250130 15:48:23.354" endtime="20250130 15:48:25.354"/>
 </kw>
-<status status="FAIL" starttime="20250130 09:57:50.800" endtime="20250130 09:58:20.694"/>
+<kw name="Click Element" library="AppiumLibrary">
+<arg>${CONFIRMER_DEPOT_DISTRI}</arg>
+<doc>Click element identified by `locator`.</doc>
+<msg timestamp="20250130 15:48:25.359" level="INFO">Clicking element 'xpath=//android.widget.Button[@content-desc="Confirmer"]'.</msg>
+<msg timestamp="20250130 15:48:26.580" level="INFO">xpath criteria: //android.widget.Button[@content-desc="Confirmer"]</msg>
+<status status="PASS" starttime="20250130 15:48:25.354" endtime="20250130 15:48:26.580"/>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<arg>5</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<msg timestamp="20250130 15:48:31.581" level="INFO">Slept 5 seconds</msg>
+<status status="PASS" starttime="20250130 15:48:26.580" endtime="20250130 15:48:31.581"/>
+</kw>
+<status status="PASS" starttime="20250130 15:47:54.600" endtime="20250130 15:48:31.581"/>
 </kw>
 <doc>Démarrage de l'application "KABU PLUS" sur le device "${DEVICE_NAME_RZCW30WHM4Y}</doc>
-<status status="FAIL" starttime="20250130 09:57:24.842" endtime="20250130 09:58:20.695">Execution terminated by signal</status>
+<status status="PASS" starttime="20250130 15:47:30.992" endtime="20250130 15:48:31.582"/>
 </test>
 <kw name="!SuiteTeardown" library="keywords" type="TEARDOWN">
 <kw name="Close All Applications" library="AppiumLibrary">
 <doc>Closes all open applications.</doc>
+<status status="PASS" starttime="20250130 15:48:31.584" endtime="20250130 15:48:32.206"/>
+</kw>
+<status status="PASS" starttime="20250130 15:48:31.584" endtime="20250130 15:48:32.206"/>
+</kw>
+<doc>TEST DE FONCTIONNALITE ABONNEMENT PAY PER VIEW SUR L'APPLICATION MAXIT LITE</doc>
+<status status="PASS" starttime="20250130 15:47:30.593" endtime="20250130 15:48:32.206"/>
+</suite>
+<statistics>
+<total>
+<stat pass="1" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="1" fail="0" skip="0" id="s1" name="Kabu Plus Distri Transfert International">Kabu Plus Distri Transfert International</stat>
+</suite>
+</statistics>
 <errors>
-<msg timestamp="20250130 09:58:21.558" level="ERROR">Execution stopped by user.</msg>
 </errors>
 </robot>

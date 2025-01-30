@@ -385,4 +385,44 @@ DISTRI TRANSFERT NATIONAL
     Click Element    ${VALIDER_RECHARGE_RAPIDO}
     sleep     2
     Click Element       ${CONFIRMER_RECHARGE_RAPIDO}
-    sleep     20000
+    sleep     2
+
+#Cette fonction permet d'effectuer 
+DISTRI TRANSFERT INTERNATIONAL
+    Wait Until Page Contains Element   ${TRANSFERT}    timeout=10
+    Click Element       ${TRANSFERT}
+    Wait Until Page Contains Element   ${INTERNATIONAL_BOX_BUTTON}    timeout=10
+    Click Element       ${INTERNATIONAL_BOX_BUTTON}
+    Wait Until Page Contains Element   ${PAYS_SELETED}    timeout=10
+    Click Element       ${PAYS_SELETED}
+    Wait Until Page Contains Element    ${INDICATIF}    timeout=10
+    Click Element     ${INDICATIF}   
+    sleep    1
+    Click Element       ${TEL_TRANSFERT_BUTTON}
+    Input Text Into Current Element   ${TEL_TRANSFERT_MALI}
+    Click Element    ${MONTANT_RETRAIT_BUTTON}
+    Sleep   1
+    Click Element    ${PRENOM_TRANSFERT_BENEFICIAIRE}
+    Input Text Into Current Element    Test_Prenom
+    Swipe     220  680   220  587  1000
+    Click Element    ${NOM_TRANSFERT_BENEFICIAIRE}
+    Input Text Into Current Element    Test_Nom
+    FOR    ${i}    IN RANGE    8    # Essaye jusqu'à 8 scrolls maximum
+        ${exists}    Run Keyword And Return Status    Page Should Contain    Choisir
+        Run Keyword If    ${exists}    RETURN
+        Swipe    188    679    188    575    500
+    END
+    Click Element    xpath=//android.widget.ScrollView/android.widget.EditText[1]
+    Input Text Into Current Element    77 453 76 56
+    Click Element    xpath=//android.widget.ScrollView/android.widget.EditText[2]
+    Input Text Into Current Element    10
+    Click Element    xpath=//android.view.View[@content-desc="Choisir"]
+    Click Element    xpath=//android.view.View[@content-desc="SCHOOL"]
+    Click Element    ${VALIDER_RECHARGE_RAPIDO}
+    Click Element    ${TEL_TRANSFERT_BUTTON}
+    sleep     2
+    Click Element    xpath=//android.widget.Button[@content-desc="Valider"]
+    sleep     2
+    Click Element    ${CONFIRMER_DEPOT_DISTRI}
+    sleep     5
+

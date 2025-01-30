@@ -91,3 +91,12 @@ ${MONTANT_VENTE_BUTTON}              xpath=//android.widget.FrameLayout[@resourc
 ${SEN_EAU_BUTTON}                    xpath=//android.widget.ImageView[@content-desc="Sen'eau"]
 ${GRILLE_COMISSION}                  xpath=//android.widget.ImageView[@content-desc="Grille commission"]
 ${TRANSFERT}                         xpath=//android.widget.ImageView[@content-desc="Transfert"]
+${INTERNATIONAL_BOX_BUTTON}          xpath=//android.widget.RadioButton[@content-desc="International"]
+${PAYS_SELETED}                      xpath=//android.view.View[@content-desc="Pays"]
+${INDICATIF}                         xpath=//android.view.View[contains(@content-desc, "Mali")]
+${TEL_TRANSFERT_BUTTON}              xpath=//android.widget.ScrollView/android.widget.EditText[1]
+${TEL_TRANSFERT_MALI}                223 5 39 55 09 56
+${PRENOM_TRANSFERT_BENEFICIAIRE}     xpath=//android.widget.ScrollView/android.widget.EditText[2]
+${NOM_TRANSFERT_BENEFICIAIRE}        xpath=//android.widget.ScrollView/android.widget.EditText[3]
+${LIST_XPATH}                        xpath=//android.view.View[@content-desc="🇲🇱 Mali +223"]
+${INDEX}                             0
